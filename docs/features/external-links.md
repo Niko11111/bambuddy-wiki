@@ -112,6 +112,18 @@ External links display with:
 - Name
 - External indicator (if opens new tab)
 
+### Matching Bambuddy's Theme
+
+A link that opens inside Bambuddy tells the page it shows which theme is active. An app built for the sidebar can use this to switch to light or dark and follow your background, style and accent colour.
+
+Bambuddy sends the theme with `postMessage`, only to the link's own origin:
+
+```json
+{"type": "bambuddy:theme", "mode": "dark", "style": "vibrant", "background": "cool", "accent": "green"}
+```
+
+It sends it when the page loads, whenever you change the theme, and when the page asks by posting `{"type": "bambuddy:theme-request"}` to its parent. The page should check that the message's origin is your Bambuddy address. Pages that don't listen are unaffected.
+
 ---
 
 ## :material-lightbulb: Use Cases
