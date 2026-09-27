@@ -989,9 +989,10 @@ GET /printers/{printer_id}/overlay-status
 ```
 
 Everything the [streaming overlay](../features/camera.md#streaming-overlay-for-obs)
-draws for one printer — name, camera rotation, live print state, and the one
-display setting it reads. A token-authenticated sibling of the printer status
-endpoint, so an OBS browser source with no login session can back the overlay.
+draws for one printer — name, model, camera rotation, live print state,
+temperatures, and the one display setting it reads. A token-authenticated
+sibling of the printer status endpoint, so an OBS browser source with no login
+session can back the overlay.
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
@@ -1005,6 +1006,7 @@ file being printed, so it sits behind its own scope.
 {
   "id": 1,
   "name": "X1C-Lab",
+  "model": "X1C",
   "camera_rotation": 0,
   "connected": true,
   "state": "RUNNING",
@@ -1015,9 +1017,14 @@ file being printed, so it sits behind its own scope.
   "layer_num": 120,
   "total_layers": 300,
   "stg_cur_name": null,
+  "temperatures": {"nozzle": 219.7, "nozzle_target": 220.0, "bed": 60.0, "bed_target": 60.0},
   "time_format": "system"
 }
 ```
+
+`model` is `null` when the printer has none stored. `temperatures` holds only
+the readings the printer reports and is `{}` when it reports none; chamber
+readings are left out on models without a real chamber sensor.
 
 That object is the entire payload. Like the Cam Wall feed it carries no
 `serial_number`, `ip_address`, or `access_code` — but it *does* carry the print

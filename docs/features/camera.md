@@ -705,6 +705,7 @@ The overlay displays:
 |---------|-------------|
 | **Camera Feed** | Full-screen live camera view |
 | **Bambuddy Logo** | Branding in top-right corner (links to GitHub) |
+| **Printer Name / Model** | Printer name and/or model, e.g. `Big Mumma · H2D` (both off by default — see Show/Hide Elements) |
 | **Filename** | Current print file name |
 | **Status** | Printing, Paused, Idle, etc. |
 | **Progress Bar** | Visual progress with percentage |
@@ -804,9 +805,12 @@ Available elements:
 | `filename` | Print file name |
 | `status` | Status text (Printing, Paused, etc.) |
 | `printer` | Printer name |
+| `model` | Printer model (off by default; omitted if unknown) |
 | `nozzle` | Nozzle temperature (both nozzles on a dual-nozzle printer) |
 | `bed` | Bed temperature |
 | `chamber` | Chamber temperature |
+
+`printer` and `model` are independent and share one line: with both, the overlay shows `Big Mumma · H2D`; with only `model`, just `H2D`. The model comes from the printer's settings in Bambuddy and is left out, separator included, when none is stored. A long name and model is cut off with an ellipsis rather than running past the edge of a narrow OBS source. In the builder, tick **Printer model** under **Fields to show**. It is off by default, so an overlay URL already in OBS looks the same until you replace it with one that includes `model`.
 
 Temperatures are shown whether or not a print is running — a preheating printer is exactly when they are worth watching. Each reading appears only when the printer reports it, so `chamber` produces nothing on a P1 or A1: those models publish a chamber value with no real sensor behind it, and Bambuddy leaves it out rather than putting a number on screen that means nothing.
 
@@ -825,8 +829,8 @@ They are **not** in the default set, so an overlay URL you are already using loo
 # Show only progress and ETA
 /overlay/1?show=progress,eta
 
-# Show everything including printer name
-/overlay/1?show=progress,layers,eta,filename,status,printer
+# Print details with printer name and model
+/overlay/1?show=progress,layers,eta,filename,status,printer,model
 
 # Minimal overlay - just progress
 /overlay/1?show=progress
