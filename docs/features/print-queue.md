@@ -294,6 +294,10 @@ Grouping tells you which queue items belong together. An **order** additionally 
 
 The **Batches** tab on the Print Queue page is where orders live. It is a separate tab because an order outlives the queue that produced it: once its runs finish they leave the active queue entirely, so the Queue tab and the History tab each hold only half the picture.
 
+### Linking to one order
+
+`/queue?batch=<id>` opens the Batches tab with that order highlighted and scrolled into view, whatever its status. Bambuddy Orders uses this for its **In Bambuddy** links.
+
 ### What an order tracks
 
 | Column | Meaning |
