@@ -32,7 +32,7 @@ The Spool Inventory page shows all your spools in a searchable, filterable table
 - **Stock filter**: All, Stock (no slicer profile), Configured (has slicer profile)
 - **Dropdowns**: Filter by Material, Brand, Category, Spool Name, **Storage Location**
     - The **Storage Location** chip lists every entry in your [storage locations catalog](storage-locations.md) (e.g. *Shelf A*, *4l drybox*), plus **No location set** for unassigned spools. The chip stays hidden until at least one spool has a storage location. Manage the catalog from **Inventory → Locations** — see [Storage Locations](storage-locations.md).
-- **Search**: Find spools by name, brand, material, or color
+- **Search**: Find spools by name, brand, material, or color. Enter an ID with a leading `#` (for example, `#42`) to find only that exact spool; a number without `#` keeps the normal partial search behavior. The same search works in the **Assign Spool** dialog and on the SpoolBuddy inventory page.
 - **View modes**: Table or Cards
 - **Group similar**: Toggle to visually collapse identical unused/unassigned spools into a single expandable row or card with a count badge (e.g., "5 identical spools"). Spools are grouped by material, subtype, brand, color, and label weight. Used or AMS-assigned spools always appear individually. Group state persists across sessions.
 
@@ -266,19 +266,35 @@ Assign inventory spools to AMS slots to track which filament is loaded where.
 
 ### Assigning a Spool
 
+You can start an assignment from either the printer card or the spool itself.
+
+#### From a printer card
+
 1. Hover over any AMS slot on the printer card (empty or configured, non-Bambu-Lab)
 2. Click **Assign Spool** in the hover card
 
 ![Assign Spool](../assets/inventory-assign.png){ .screenshot }
 
-3. Select a spool from the filtered list
+3. Select a spool from the filtered list. Each result includes its `#ID`, which helps distinguish otherwise identical spools.
 4. Click **Assign Spool** to confirm
 
 The assign modal automatically:
 
-- **Filters out Bambu Lab spools** — these are tracked via RFID and managed by the AMS
 - **Filters out already-assigned spools** — each spool can only be in one slot at a time
-- Shows only manually added (non-BL) spools
+- **Shows only matching spools** — a spool is listed when its slicer profile or material matches the slot (a partial material match counts, so a PLA spool fits a PLA Basic slot). **Show all spools** lifts this filter and also lists spools already assigned to another slot
+
+#### From the spool editor or QR view
+
+1. Open an existing spool from Inventory, or scan its Bambuddy QR code.
+2. If the spool has no slot yet, click **Assign Spool** in the spool editor. An assigned spool shows **Unassign** there instead.
+3. Select the printer, then an AMS, AMS-HT or external slot.
+4. Review the selected slot and click **Assign Spool** to confirm.
+
+To change the spool's color, use the **Color & Cost** tab in the spool editor.
+
+Selecting a slot does not change the assignment until you click the confirmation button. If the spool material conflicts with the material reported by the slot, Bambuddy asks you to confirm the mismatch. An offline printer or an unavailable AMS is shown in the dialog instead of silently failing.
+
+Keyboard users can select AMS slots with <kbd>Enter</kbd> or <kbd>Space</kbd>.
 
 ### Bulk actions
 
