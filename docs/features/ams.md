@@ -516,7 +516,7 @@ When an AMS unit contains **mixed filament types** (e.g., PLA and PETG in the sa
 
 A single global humidity threshold is a poor fit for multi-material print farms — Nylon wants to stay under 20%, PLA is happy at 60%, ASA somewhere in between. Bambuddy lets you set a different **trigger threshold per filament type**, in addition to the conservative drying temp/duration above.
 
-Configure overrides in **Settings** > **Workflow** > **Auto-Drying** in the table directly below the **Drying Presets** table:
+Configure overrides in **Settings** > **Workflow** > **Queue Auto-Drying** in the table directly below the **Drying Presets** table:
 
 | Filament | Threshold |
 |----------|-----------|
@@ -620,7 +620,7 @@ Automatically dry filament on any idle printer whenever AMS humidity exceeds the
 
 1. The scheduler continuously monitors all idle printers
 2. For each AMS unit, it reads the current humidity level
-3. If humidity exceeds the **Fair (orange)** threshold from Settings, drying is triggered
+3. If humidity exceeds the **Fair (orange)** threshold from Settings, drying is triggered — after the [sustained-humidity wait](#sustained-humidity), if it is switched on
 4. The drying temperature and duration are determined by the loaded filament types using the configured [drying presets](#configurable-drying-presets)
 5. Drying runs for the preset **duration** — the printer stops it automatically when the cycle completes
 
@@ -628,9 +628,30 @@ Unlike queue auto-drying, ambient drying does not require any scheduled queue it
 
 ### Enabling Ambient Drying
 
-1. Go to **Settings** > **Print Queue**
-2. Find **Ambient Drying**
-3. Enable **Enable ambient drying**
+1. Go to **Settings** > **Workflow**
+2. Find the **Queue Auto-Drying** card
+3. Enable **Ambient drying**
+
+### Waiting Out a Humidity Spike { #sustained-humidity }
+
+Opening the AMS lid can admit room air and cause a temporary humidity rise. Ambient drying uses the unit's effective humidity trigger threshold: the most restrictive applicable per-filament threshold when overrides are configured, or the global **AMS Humidity Threshold (Fair)** otherwise (see [Per-Filament Humidity Threshold](#per-filament-humidity-threshold)). With the sustained wait off, one reading above that threshold can start a cycle. Whether a rise is transient or signals a need for drying depends on the AMS and room conditions.
+
+**Require sustained humidity** (shown once ambient drying is enabled, in the same settings block) makes an ambient start wait until the unit's humidity has stayed above its effective trigger threshold **continuously** for a set number of minutes (5–240). The field starts at 15 minutes when you switch it on. Off by default — with it off, ambient drying starts instantly, exactly as before. The wait belongs to ambient drying: with ambient drying off it has no effect, even if a value is still stored.
+
+Continuously means exactly that:
+
+- A single reading back at or below the threshold clears the wait. The clock starts over the next time the reading crosses the threshold.
+- A missing reading is treated as no information, not as a dip — a sensor that skips a beat does not reset the count.
+- A gap longer than four scheduler polling intervals, with a two-minute minimum (for example, after Bambuddy restarts, the printer disconnects, or a print runs on a printer that is not [drying while printing](#continue-drying-while-printing)), restarts the wait. Time nobody measured is not evidence the humidity stayed high. The restart is logged, so a wait that never matures can be explained from the log.
+
+Only a printer with a **scheduled queue item pending** keeps the instant behavior — minutes burned ahead of a scheduled job is exactly what [queue auto-drying](#queue-auto-drying) exists to prevent, and the exemption follows the schedule whether the printer is idle or printing. While ambient drying is on, a start on a printer that is printing (possible with [Continue drying while printing](#continue-drying-while-printing)) serves the same wait as a start on an idle printer: a lid opened mid-print causes the same brief spike.
+
+Note that the exemption is per **printer**, not per AMS unit: any pending scheduled item lifts the wait for every AMS on that printer, including units the scheduled job will never touch. A printer that always has something queued — a standing schedule, for instance — effectively never waits; its drying is governed by [queue auto-drying](#queue-auto-drying)'s deadline logic instead.
+
+The wait runs **alongside** the 30-minute [cooling-off period](#drying-threshold-floor) after a finished cycle rather than after it, so a re-dry waits for whichever is longer, not both in a row. And like the cooling-off period and the unproductive-cycle suspension, it only ever delays *starting* a cycle — a running cycle, or one you started by hand, is untouched.
+
+!!! tip "Picking a value"
+    **15 minutes is a measured starting point, not a guarantee.** On one H2D, every AMS unit was back at or below 25% humidity within about 12 minutes of opening its lid for one to five minutes. If your AMS normally sits close to its threshold, the reading may not drop back below it during the wait, and drying will start — which is the right outcome. Adjust the value for how far your threshold sits above the closed-lid reading, how long you usually keep the lid open, and your room and desiccant. See [the measurement notes in the code PR](https://github.com/maziggy/bambuddy/pull/2895) for the details and limitations.
 
 ### Using Both Modes Together
 
@@ -647,7 +668,7 @@ When both are enabled and a printer has scheduled prints, queue auto-drying take
 
 - AMS 2 Pro or AMS-HT unit (original AMS does not support drying)
 - Supported printer firmware (see [firmware requirements](#printer-firmware-requirements) above)
-- Humidity above the Fair threshold
+- Humidity above the effective trigger threshold (per-filament override when configured; otherwise the global Fair threshold)
 - No active power constraints on the AMS unit (see [power supply requirements](#power-supply-requirements))
 
 !!! tip "Print Farm Use Case"
@@ -657,9 +678,9 @@ When both are enabled and a printer has scheduled prints, queue auto-drying take
 
 ## :material-fire-truck: Continue Drying While Printing
 
-Bambu shipped an "AMS Print While Drying" firmware feature on selected printers that lets the AMS keep running its drying cycle **concurrently** with an active print. With this feature enabled in Bambuddy, the existing auto-drying scheduler can also evaluate printers that are mid-print — drying does not stop the instant a print starts.
+Bambu shipped an "AMS Print While Drying" firmware feature on selected printers that lets the AMS keep running its drying cycle **concurrently** with an active print. With this feature enabled in Bambuddy, the existing auto-drying scheduler can also evaluate printers that are mid-print — drying does not stop the instant a print starts. With queue auto-drying or ambient drying also on, a printing printer is dried when its humidity is above the threshold, whether or not it has scheduled prints. The [sustained-humidity wait](#sustained-humidity) applies to these starts only while ambient drying is on.
 
-**Off by default.** Opt-in toggle in **Settings** > **Workflow** > **Continue drying while printing**.
+**Off by default.** Opt-in toggle in **Settings** > **Workflow** > **Queue Auto-Drying** > **Continue drying while printing**.
 
 ### Firmware Requirements
 
@@ -695,8 +716,8 @@ On an unsupported printer the toggle has no effect — the firmware reports `dry
 
 ### Enabling
 
-1. Go to **Settings** > **Print Queue**
-2. Find **Continue drying while printing**
+1. Go to **Settings** > **Workflow**
+2. Find **Continue drying while printing** in the **Queue Auto-Drying** card
 3. Enable the toggle
 
 The toggle is independent of [queue auto-drying](#queue-auto-drying) and [ambient drying](#ambient-drying) — you can mix and match. With all three enabled, drying runs in idle gaps **and** during prints on capable hardware, each cycle running for its configured preset duration.
