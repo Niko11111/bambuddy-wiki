@@ -379,7 +379,7 @@ When a camera snapshot is available (e.g. First Layer Complete, Print Started, P
 | Event | Description |
 |-------|-------------|
 | **Printer Offline** | Connection lost |
-| **Printer Error** | A new HMS fault, with the description Bambu publishes for it on your printer model. Faults Bambu publishes no text for are not sent. |
+| **Printer Error** | A new HMS fault, with the description Bambu publishes for it on your printer model. Faults Bambu publishes no text for, and notices that don't need you (such as "The top cover is open"), are not sent; see [HMS Error Monitoring](monitoring.md#error-details). |
 | **AI Failure Detection** | Obico ML detected a possible print failure (spaghetti, layer shift, etc.). Fires only when [Failure Detection](failure-detection.md) is enabled and the printer crosses the configured sensitivity threshold. Off by default. |
 | **Printer Sensor Alert** | A [Home Assistant sensor](sensors.md#printer-sensors) bound to a printer entered its alert state — an enclosure door opened, a chamber ran hot. Fires on the transition in, not repeatedly. Off by default. Storage-location sensors have their own event, below. |
 | **Low Filament** | Filament running low |

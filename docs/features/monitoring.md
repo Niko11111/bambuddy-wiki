@@ -288,7 +288,7 @@ The HMS indicator is always visible on printer cards:
 | Status | Meaning | Action |
 |:------:|---------|--------|
 | :material-check-circle:{ style="color: #4caf50" } **OK** | No faults that count | None needed |
-| :material-alert:{ style="color: #ff9800" } Amber, with a count | Only **Notice**-level faults: the printer tells you something, the print carries on | Check when convenient |
+| :material-alert:{ style="color: #ff9800" } Amber, with a count | Only **Notice**-level faults that count, such as a prompt waiting for you; the print carries on | Check when convenient |
 | :material-alert-circle:{ style="color: #f44336" } Red, with a count | At least one **Error** (the print was stopped) or **Warning** (the print is paused) | Needs attention |
 
 The levels are the ones the printer itself reports, the same ones Bambu Studio and Bambu Handy use.
@@ -303,7 +303,12 @@ Click the HMS indicator to see:
 - The action buttons Bambu offers for it, if any (below)
 - A link to Bambu Lab's HMS wiki
 
-Some codes have no published text: Bambu lists a few with an empty description, and some aren't listed at all. These don't count toward the indicator, the printer card's problem badge or the Camera Wall, because the printer isn't reporting a problem you can act on. The modal still lists them, collapsed under **Also reported, without a description**, so nothing the printer is holding is hidden. A fault with no text that does offer action buttons still counts, so its buttons show.
+Two kinds of fault don't count toward the indicator, the printer card's problem badge or the Camera Wall, and don't send notifications:
+
+- **Notices that don't need you.** Level-**Notice** faults from the printer's HMS list with no action buttons, such as "The top cover is open" or "The chamber temperature is high, and the system has increased the fan speed". A printer can hold these through a whole print.
+- **Codes without published text.** Bambu lists a few codes with an empty description, and some aren't listed at all.
+
+The modal still lists them, with their text where Bambu has one, collapsed under **Also reported, not counted**, so nothing the printer is holding is hidden. A fault that offers action buttons always counts, so its buttons show.
 
 ### Error Actions (Resume / Stop / Check Assistant / …)
 
