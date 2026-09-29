@@ -175,7 +175,7 @@ Custom materials work just like built-in ones for inventory tracking, usage hist
 | **Remaining Weight** | Current filament remaining — shows `label_weight - weight_used` with a reference maximum |
 | **Cost per kg** | Used for archive cost roll-ups in Statistics. |
 | **Category** | Free-text label like *Production*, *Prototype*, or *Client A*. Used purely for organisation — appears as an inventory filter chip and as a way to group spools that share a different low-stock threshold. The form autocompletes from categories already in use across your other spools so casing stays consistent. Optional. |
-| **Low-stock threshold (this spool)** | Per-spool override of the global low-stock percentage. Leave blank to use whatever's set in the inventory's stat-card threshold control (default 20 %). Useful for marking *production* spools to alert earlier (e.g. 50 %) while letting *prototype* spools stay quiet until much later. The override applies to both the stat-card "Low Stock" count and the "Low Stock" filter. |
+| **Low-stock threshold (this spool)** | Per-spool override of the global low-stock percentage. Leave blank to use whatever's set in the inventory's stat-card threshold control (default 20 %). Useful for marking *production* spools to alert earlier (e.g. 50 %) while letting *prototype* spools stay quiet until much later. The override applies to the stat-card "Low Stock" count, the "Low Stock" filter and the [Low Filament notification](notifications.md#printer-events). |
 | **Storage Location** | Physical shelf, drawer, or drybox from your [locations catalog](storage-locations.md). Pick an existing entry from the dropdown or type a new name and click **Add**. |
 | **Note** | Free-text notes about the spool |
 
@@ -930,7 +930,7 @@ Assigning a spool is the simplest workflow — it handles both tracking and prin
     For the most accurate remaining weight, weigh the full spool on a kitchen scale and subtract the empty spool weight. Enter this as the remaining weight when adding a new spool.
 
 !!! tip "Low Stock Alerts"
-    Keep an eye on the "Low Stock" summary card. Spools below 20% remaining are flagged so you can reorder before running out.
+    Keep an eye on the "Low Stock" summary card. Spools below 20% remaining are flagged so you can reorder before running out. To be told instead, enable the **Low Filament** event on a [notification provider](notifications.md#printer-events); it covers spools assigned to a slot.
 
 !!! tip "PA Profiles"
     Link K-factor profiles to your spools so the correct pressure advance settings are always associated with each filament.
