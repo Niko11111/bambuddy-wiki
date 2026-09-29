@@ -351,7 +351,7 @@ Slots containing Bambu Lab spools (identified by RFID) do not show assign/unassi
 
     The same happens when the slot's filament stops matching the spool at all — a different colour or a different material means a different roll is in there, so the stale assignment is released rather than left pointing at filament you are no longer printing. A slot that empties during a print is left alone, because that is a runout and the spool is still in the AMS.
 
-    Taking a spool out releases its assignment after two minutes, not at once. The AMS sometimes reports a slot, or a whole unit, as empty for a moment while every spool stays where it is, and an assignment released on that report would be lost for good. A slot that reads normally again within the two minutes keeps its assignment. A different spool going in still releases the old assignment straight away.
+    Taking a spool out releases its assignment after two minutes, not at once. The AMS sometimes reports a slot, or a whole unit, as empty for a moment while every spool stays where it is, and an assignment released on that report would be lost for good. A slot that reads normally again within the two minutes keeps its assignment. A different spool the AMS can identify still releases the old assignment straight away. One it cannot read releases it when the two minutes are up.
 
 !!! info "Stable Assignments on Startup"
     Spool assignments are preserved across Bambuddy restarts. If the same spool is still in the slot (verified by RFID identifiers), the assignment is kept without sending any commands to the printer.
