@@ -471,6 +471,8 @@ Everything else is optional and shown here with its default:
 | `BAMBUDDY_OIDC_ICON_URL` | *(none)* | Same rules as the UI icon field |
 | `BAMBUDDY_OIDC_AUTOLOGIN` | `false` | Redirect straight to this provider |
 | `BAMBUDDY_OIDC_DEFAULT_GROUP` | *(none)* | Group new users land in — a group **name**, see below |
+| `BAMBUDDY_OIDC_GROUP_CLAIM` | `groups` | Claim to read IdP groups from — see [Group Sync](#group-sync) |
+| `BAMBUDDY_OIDC_GROUP_MAPPING` | *(none)* | JSON object mapping IdP groups to BamBuddy group **names** |
 
 Booleans accept `true`, `1` or `yes` for on and `false`, `0` or `no` for off
 (case-insensitive). Leaving a variable out, or setting it to an empty value,
@@ -595,6 +597,85 @@ the database.
     `BAMBUDDY_LOCAL_LOGIN=true` re-enables username and password sign-in. See
     [Recovery](#recovery-bambuddy_local_logintrue) below.
 
+### Group Sync
+
+OIDC providers can sync the user's groups from the identity provider into
+BamBuddy groups on every login — the same behaviour the LDAP group mapping has
+had since the beginning. Two per-provider settings control it:
+
+- **Group Claim** — the JWT claim that carries the user's groups at the IdP.
+  Defaults to `groups`. Providers put groups in different claims (Keycloak:
+  `groups` as an array after a client mapper; Authentik: `groups` as an array;
+  some setups use `roles` or a custom claim), so the claim name is configurable
+  like the Email Claim. Namespaced claims such as `app/roles` are accepted
+  too, for Auth0. The claim value may be a JSON array or a
+  space/comma-separated string — both are accepted. The claim is read from the
+  **ID token** only, not from the userinfo endpoint: make sure your IdP puts the
+  groups into the ID token (in Keycloak, the group mapper's *Add to ID token*
+  switch; elsewhere often a scope such as `groups` that has to be added to
+  **Scopes**).
+- **Group Mapping** — which IdP group maps to which BamBuddy group. The admin
+  picks the pairs; names do not have to match. With no mapping configured the
+  feature is off and the provider behaves exactly as before.
+
+```json
+{
+  "fablab-staff": "Operators",
+  "students": "Viewers"
+}
+```
+
+The provider form builds the mapping as rows, with the BamBuddy side limited to
+existing groups, so an unknown group cannot be entered by accident. A row with
+only one side filled in, or a second row for an IdP group already mapped above
+(compared ignoring case), is flagged and blocks **Save** until you complete or
+remove it. A row left completely empty is simply skipped:
+
+![OIDC provider form with Group Claim and Group Mapping rows](../assets/settings-oidc-group-sync.png)
+
+How the sync behaves:
+
+- **Runs on every SSO login**, not just when the account is created.
+- **Only the mapped slice is managed.** Groups named in the mapping follow the
+  IdP; any other group on the user is a manual assignment and survives logins
+  unchanged. Promoting a user into a non-mapped group therefore sticks — the
+  same rule the LDAP sync settled on after #1292.
+- **Revocation propagates.** Losing the IdP group removes the mapped BamBuddy
+  group at the next login.
+- **Matching is case-insensitive** on the IdP side, and a missing claim simply
+  means "no mapped groups" — it never blocks a login that already
+  authenticated. Neither does a sync that fails: the error is logged and the
+  user keeps the groups they had.
+- **The Default Group is not re-applied.** It is assigned once, when the
+  account is created; the sync never puts it back, so moving a user out of it
+  sticks.
+
+> **Deleting a mapped group:** removing a BamBuddy group does not rewrite any
+> provider's mapping. The mapping row is flagged in the form (red border, the
+> stale name shown as *(deleted)*) until you pick a replacement or remove the
+> row; at sync time a dangling entry is skipped.
+
+> **Renaming a mapped group has the same effect.** Mappings store group
+> **names**, so renaming a non-system BamBuddy group turns its mapping row
+> into an orphan just like a deletion does — and users who already hold that
+> group keep it, because the group is no longer in the set the mapping
+> manages. The LDAP group mapping behaves the same way.
+
+Via environment variables, the same two settings are `BAMBUDDY_OIDC_GROUP_CLAIM`
+(default `groups`) and `BAMBUDDY_OIDC_GROUP_MAPPING` (a JSON object whose values
+are BamBuddy group **names**, not IDs):
+
+```bash
+BAMBUDDY_OIDC_GROUP_MAPPING={"fablab-staff":"Operators","students":"Viewers"}
+```
+
+Like `BAMBUDDY_OIDC_DEFAULT_GROUP`, a mapping value that matches no group is
+**refused** — the whole provider configuration is skipped, the reason is
+logged, and the app still starts. Invalid JSON, a value that is not a group
+name (such as `null` or a number), and two IdP groups that differ only by case
+are rejected the same way, with the reason in the log.
+Removing the variable clears the mapping on the next boot.
+
 ### Provider Icons
 
 If an **Icon URL** is configured, Bambuddy fetches the image server-side at save time and caches the bytes in the database. The SSO button on the login page then loads the icon from a same-origin proxy at `/api/v1/auth/oidc/providers/{id}/icon` — never from the IdP's host directly.
@@ -630,6 +711,8 @@ Two independent toggles per provider:
 | **Auto-link existing accounts** | Off | On first successful SSO login where the verified email matches an existing local user, link the two accounts. Off → admins must pre-link manually to prevent silent takeover by an attacker-controlled IdP |
 | **Email Claim** | `email` | JWT claim used as the user's email identity. Set to `preferred_username` or `upn` for Azure Entra ID. Custom claims bypass the `email_verified` check entirely |
 | **Require Email Verified** | On | Only accept the email claim if the provider marks it as verified (`email_verified: true`). Disable only when the provider never sends this flag (e.g. Azure Entra ID) or when using a custom Email Claim |
+| **Group Claim** | `groups` | JWT claim that carries the user's IdP groups — see [Group Sync](#group-sync) |
+| **Group Mapping** | *(empty)* | IdP group → BamBuddy group pairs; empty disables group sync |
 
 Auto-link is gated by an additional check: if the target user already has any OIDC link, a second IdP cannot auto-link to the same account.
 
