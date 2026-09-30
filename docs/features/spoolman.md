@@ -222,10 +222,18 @@ Hover over any AMS slot to see:
 AMS Lite units (e.g., A1 series) have no weight sensor and always report 0% fill level. When a spool is linked to Spoolman and has weight data, Bambuddy uses Spoolman's remaining weight instead:
 
 - **AMS with weight sensor** - Uses AMS percentage directly (no change)
-- **AMS Lite (reports 0%)** - Falls back to Spoolman: `(remaining_weight / filament_weight) × 100`
+- **AMS Lite (reports 0%)** - Falls back to Spoolman: `(remaining weight / spool size) × 100`, with the spool size taken as described in [Spool Size (Label Weight)](#spool-size-label-weight)
 - **External spool** - Shows fill level from Spoolman if linked (otherwise shows "—")
 
 When Spoolman data is used, the hover card displays "(Spoolman)" next to the fill percentage so you can distinguish the data source.
+
+#### Spool Size (Label Weight)
+
+Spoolman stores how much filament a full spool holds in two places: the spool's own **Initial Weight**, and the filament's **Weight** as the catalogue value. One filament can have spools of different sizes, so Bambuddy uses the spool's **Initial Weight** and falls back to the filament's **Weight** only when the spool has none.
+
+This is the **Label Weight** in the spool form. It is used for the fill level, for **Sync Weights from AMS** (the AMS percentage is a percentage of this spool), and for print cost. Changing it in the spool form changes only that spool; the filament and any other spools of it are left alone.
+
+The **Cost per kg** in the spool form is stored in Spoolman as the spool's **Price**, which Spoolman treats as the price of the whole spool. Bambuddy converts between the two using the spool's size, so 25 per kg on a 250 g spool is stored as a price of 6.25.
 
 #### Empty Spool Weight (Tare)
 
@@ -473,9 +481,11 @@ The price comes from Spoolman, in this order:
    something other than the catalogue figure.
 2. **The filament's `Price`**, otherwise.
 
-The rate per gram is that price divided by the filament's **`Weight`** — the net
-filament weight, not including the spool core — so a 750 g roll is priced as a
-750 g roll.
+The rate per gram is that price divided by the net filament weight it was paid
+for, not including the spool core. The spool's own price is divided by the
+spool's **`Initial Weight`** (or the filament's **`Weight`** if the spool has
+none), so a 250 g spool is priced as a 250 g spool. The filament's price is
+divided by the filament's **`Weight`**.
 
 !!! note "When a price is missing"
     Grams that no spool could price are charged at **Settings → Default
