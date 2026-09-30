@@ -316,7 +316,7 @@ Bambuddy supports LDAP/Active Directory authentication, allowing users to log in
    - **User Search Filter** — LDAP filter to find users. `{username}` is replaced with the login name
      - Active Directory: `(sAMAccountName={username})`
      - OpenLDAP: `(uid={username})`
-3. Click **Save**, then **Test Connection** to verify
+3. Click **Save**, then **Test Connection** to verify. If it reports that the server refused StartTLS, the server only offers LDAPS (lldap is one): choose **LDAPS** and use its `ldaps://` URL and port
 4. Click **Enable** to activate LDAP authentication
 
 !!! warning "TLS Required"
@@ -348,7 +348,8 @@ LDAP groups can be mapped to BamBuddy groups for automatic role assignment. The 
 
 - Keys are LDAP group DNs (case-insensitive matching)
 - Values are BamBuddy group names
-- Both Active Directory groups (`memberOf` attribute) and POSIX groups (`memberUid` attribute) are supported
+- Membership is read from the user's `memberOf` attribute (Active Directory, lldap, OpenLDAP with the memberof overlay, 389-DS), from `groupOfNames` / `groupOfUniqueNames` groups that list the user in `member` / `uniqueMember`, and from POSIX groups (`memberUid`)
+- Groups are found anywhere in the directory, not only under the **Search Base**, so a Search Base of `ou=people,dc=example,dc=com` still finds groups under `ou=groups,dc=example,dc=com`
 - A user's POSIX **primary** group — the one their `gidNumber` points at — counts as full membership, the same as Unix treats it
 - Group membership is synced on every login
 
@@ -359,9 +360,19 @@ LDAP groups can be mapped to BamBuddy groups for automatic role assignment. The 
     The POSIX lookups above need your directory to define the `posixGroup` object
     class in its published schema. Some directories do not — lldap is the common
     one: it marks every account it creates as `posixAccount`, but its groups are
-    only ever `groupOfNames`. There is nothing to configure. BamBuddy notes the
-    absence in the log and maps groups from `memberOf`, which is where those
-    directories keep membership anyway.
+    only ever `groupOfNames` / `groupOfUniqueNames`. There is nothing to configure. BamBuddy notes the
+    absence in the log and maps groups from `memberOf` and from the groups that
+    list the user, which is where those directories keep membership anyway.
+
+!!! info "Why groups are asked as well as `memberOf`"
+    Outside Active Directory, `memberOf` can be incomplete. Plain OpenLDAP has
+    none unless the memberof overlay is loaded, and the overlay tracks only the
+    group class it was set up for and only groups changed after it was loaded.
+    So on every directory except Active Directory, BamBuddy also searches for
+    `groupOfNames` and `groupOfUniqueNames` entries that list the user. The
+    service account (**Bind DN**) needs read access to the groups for this. On
+    lldap, a service account in `lldap_strict_readonly` has it; a plain lldap
+    user can't read other users either, so LDAP login would not work at all.
 
 ### Password Management
 
