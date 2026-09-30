@@ -378,7 +378,7 @@ Prioritize shorter print jobs so more jobs complete sooner.
 
 ### How It Works
 
-When SJF is enabled, the scheduler picks the shortest pending print for each printer instead of following FIFO order:
+When SJF is enabled, the scheduler picks the shortest pending print for each printer instead of following FIFO order. Jobs pinned to a printer and "Any <model>" jobs that can run on it are compared together:
 
 1. **Jumped items first** — jobs that were previously skipped get top priority (starvation guard)
 2. **Shortest duration next** — among remaining items, the shortest print time wins
@@ -390,7 +390,7 @@ The queue page automatically reorders to show the scheduler's actual execution o
 
 Without protection, a long job could be postponed indefinitely as shorter jobs keep arriving. SJF includes an automatic fairness mechanism:
 
-- When a shorter job jumps ahead of a longer one, the longer job is flagged as "jumped"
+- When a shorter job jumps ahead of a longer one, the longer job is flagged as "jumped" &mdash; also when one is pinned to the printer and the other is an "Any <model>" job
 - A jumped job **cannot be skipped again** — it moves to the front of the queue on the next cycle
 - This guarantees every job eventually prints, regardless of duration
 
@@ -499,6 +499,11 @@ Reorder prints in the queue:
 4. Release to reorder
 
 Prints execute in order from top to bottom.
+
+This is one order for the whole queue, whatever each job is queued for. A job pinned to a printer and an "Any P2S" job compete for the same printer, and whichever is **higher in the list** gets it. A job that can't start yet, for example because its printer is busy, does not hold up the jobs below it on other printers.
+
+!!! note "Since 1.2.6b1 ([#3200](https://github.com/maziggy/bambuddy/issues/3200))"
+    Earlier versions sorted by target first: on SQLite an "Any <model>" job always won a printer over a job pinned to it, and on PostgreSQL the pinned job always won, wherever you had dragged them. New jobs now go to the end of the whole list, not the end of their printer's part of it.
 
 ### Multi-drag
 
