@@ -689,22 +689,36 @@ In the **Logistics** view a graph shows predicted stock variations based on reor
 
 ## :material-printer: Printable Labels
 
-Bambuddy can generate PDF labels for any selection of spools. The label carries the colour swatch (with multi-colour gradient stripes for spools that have extra colours), brand, material, name, the spool ID, and a QR code that deep-links straight back to that spool's row in Bambuddy when scanned with a phone — useful for finding the right spool in storage.
+Bambuddy can generate labels for any selection of spools, as a PDF or as PNG images. A label carries the colour swatch (with multi-colour gradient stripes for spools that have extra colours), and you choose which lines go with it: brand, material, name, storage location, temperatures, weight and more, the spool ID, and a QR code that deep-links straight back to that spool's row in Bambuddy when scanned with a phone — useful for finding the right spool in storage.
 
-### Two ways to start
+### Ways to start
 
 - **Per-spool icon** — every spool card and table row has a small printer icon. Click it to print just that one spool's label.
-- **Header bulk button** — *Print labels…* in the inventory page header opens the picker pre-selected with every spool currently visible (i.e. matching your filters). Refine the selection in the modal.
+- **Header button** — *Print labels…* in the inventory page header. With spools ticked in the list, the picker opens with those selected; with none ticked, it opens with every spool currently visible (i.e. matching your filters). Refine the selection in the modal.
+- **Selection bar** — tick spools in the list and click **Print labels** in the bar that appears.
 
 ### The picker
 
-The modal lists the spools you can choose from with checkboxes. From the top:
+The left side lists the spools you can choose from with checkboxes:
 
 - **Search** — substring match across name, brand, and `#ID` (e.g. type `#42` to jump to spool 42).
 - **Material chips** — narrow the visible list to a single material (PLA, PETG, …). Chips are derived from your library so you only see what you actually have.
+- **Sort** — by ID or by colour. Labels print in the order shown, so *By colour* gives you a sheet that reads as a rainbow.
 - **Select all visible / Deselect visible / Clear all** — additive selection actions. *Select all visible* adds the currently filtered list to your selection without dropping anything you'd already picked outside the filter; *Clear all* wipes the entire selection. This means you can build a selection across filters: filter to PLA, click *Select all visible*, switch to PETG, click *Select all visible* again — both groups are now selected.
 - **Live "X selected" count** in the modal title so you always know what you're about to print.
-- **Starting label position** — the number field below the list, beside **Monochrome**. Choose the first unused position when printing an Avery sheet; position 1 remains the default, and single-label templates ignore it.
+
+The right side is the label itself:
+
+- **Label size** — the template (see below).
+- **Preview** — the first selected spool's label, exactly as it will print, updated as you change the options.
+- **Print on the label** — tick the lines you want. **Reset to default** goes back to the standard set.
+- **Monochrome (black & white printer)** — see the tip below.
+- **Starting label position** — shown for Avery sheets only (see below).
+- **Output** — **PDF** or **PNG**, and for PNG the resolution.
+
+Then click **Create PDF** or **Download PNG**.
+
+The picker remembers the label size, the lines ticked for each size, monochrome and the output settings in your browser, so the next batch comes out the same. The lines are remembered per size because a 40 × 30 mm roll label and an A4 sheet hold different amounts.
 
 ### Template sizes
 
@@ -712,8 +726,10 @@ Pick the template that matches your label stock or holder:
 
 | Template | Size | Per page | Best for |
 |---|---|---|---|
-| **AMS holder** | 30 × 15 mm | 1 | The popular [Makerworld AMS Filament Label Holder](https://makerworld.com/en/models/752566) (model 752566). Compact identification at-a-glance. |
-| **Box label** | 62 × 29 mm | 1 | Brother PT/QL or Dymo small labels. Carries name, brand, material, storage location, and a QR code. |
+| **AMS holder — small** | 74 × 33 mm | 1 | The printable label from the [Makerworld AMS Filament Label Holder](https://makerworld.com/en/models/752566) (model 752566). |
+| **AMS holder — large** | 75 × 55 mm | 1 | The cardstock-insert variant of the same holder. The roomiest template. |
+| **Box label** | 40 × 30 mm | 1 | Common DK/Brother roll size; filament bags and storage bins. |
+| **Box label** | 62 × 29 mm | 1 | Brother PT/QL or Dymo small labels. |
 | **Avery L7160** | 38.1 × 63.5 mm | 21 | EU sheet stock — A4 paper, 21 labels per sheet (3 columns × 7 rows). |
 | **Avery 5160** | 25.4 × 66.7 mm | 30 | US sheet stock — Letter paper, 30 labels per sheet (3 columns × 10 rows). |
 
@@ -725,23 +741,39 @@ Use **Starting label position** to leave used positions blank on the first sheet
 
 1. Count the positions from left to right and top to bottom, beginning with 1 in the upper-left corner.
 2. Enter the first unused position: **1–21** for Avery L7160 or **1–30** for Avery 5160.
-3. Choose the matching Avery template to generate the PDF.
+3. Click **Create PDF** (or **Download PNG**).
 
 For example, starting at position 8 leaves positions 1 through 7 blank and places the first selected spool at position 8. Labels continue in reading order. If the selection fills the remaining positions on the first sheet, every later page begins at position 1.
 
 The position is not remembered. The picker opens at 1 every time, so set it again each time you come back to a part-used sheet — Bambuddy has no way of knowing which labels you have peeled off since the last batch.
 
 !!! note "Sheet templates only"
-    Starting position applies only to Avery L7160 and Avery 5160 sheets. Roll and single-label templates always begin at their normal position. Enter a number a sheet cannot hold — 25 on an L7160, say — and that sheet's own button is disabled and shows its range in place of the usual hint, while the sheet that *can* hold it stays available.
+    The field only appears for the Avery L7160 and Avery 5160 sheets. Enter a number the chosen sheet cannot hold — 25 on an L7160, say — and the field shows the sheet's range and the print button stays disabled until you fix it.
 
 ### What's on each label
 
-- **Colour swatch** — the spool's `rgba`. Spools with multi-colour stops (`extra_colors`) render as vertical stripes in the order you saved them.
-- **Brand · material · subtype** — small text row.
-- **Spool name** — bold; what you set in the spool form.
-- **Storage location** — italic, only on the box-label and Avery templates (the AMS holder is too small).
-- **Spool ID** — large bold `#N`, anchored at the bottom-left. This is the killer field for telling 8 spools of "PLA White" apart in your closet, especially partials.
-- **QR code** — links to `/inventory?spool=<id>` so a phone scan jumps straight to the spool's row in Bambuddy. The AMS-holder template skips the QR (no room at 30 × 15 mm) — the spool ID and swatch are enough at AMS-bay distance.
+The colour swatch is always on the label (unless you print in monochrome) — the spool's `rgba`, with multi-colour stops (`extra_colors`) as vertical stripes in the order you saved them. Everything else is your choice:
+
+| Line | Printed as | On by default |
+|---|---|---|
+| **Brand** | bold, at the top | yes |
+| **Material and subtype** | `PLA · Matte` | yes |
+| **Colour code** | `#E8F0E0` — tells near-identical colours apart, and carries the colour in monochrome | yes |
+| **Colour or filament name** | bold; the colour name, or the filament/slicer name when the spool has none | yes |
+| **Storage location** | italic | yes |
+| **Material number** | the spool's material number (in Spoolman mode, the filament's article number) | no |
+| **Nozzle temperature** | `190–230 °C`, from the spool's temperature settings (in Spoolman mode, the filament's extruder temperature) | no |
+| **Net weight** | `1000 g`, the label weight | no |
+| **Note** | italic; in Spoolman mode, the spool's comment | no |
+| **Date added** | `2026-09-30` | no |
+| **QR code** | on the right; links to `/inventory?spool=<id>` so a phone scan jumps straight to the spool's row in Bambuddy | yes |
+| **Spool ID** | large bold `#N` at the bottom. This is the killer field for telling 8 spools of "PLA White" apart in your closet, especially partials | yes |
+
+The lines print top to bottom in the order of this table. The label carries values only — numbers, units, dates — and no words, so it reads the same in every language.
+
+A line that doesn't fit on the chosen size is left out rather than printed over the spool ID; the preview shows which ones made it. Unticking the QR code gives its space to the text. The name line is skipped when it would only repeat the brand or the subtype.
+
+Built-in inventory and Spoolman labels are built from the same fields, so a spool prints the same in both modes.
 
 !!! tip "Low-resolution / thermal label printers"
     The QR is tuned to stay scannable on cheap 203 dpi thermal printers, including on the small 40 × 30 mm box label where earlier builds rendered it too densely and the lines bled together. If you print to a **black-and-white** thermal printer, tick **Monochrome (black & white printer)** in the print dialog — it drops the colour swatch (which prints as a meaningless grey block) and gives that space to the text; the colour is still shown as the hex code line.
@@ -750,9 +782,10 @@ The position is not remembered. The picker opens at 1 every time, so set it agai
 
 The QR encodes the URL Bambuddy can be reached at + `/inventory?spool=<id>`. By default this is the request's own scheme + host (`https://bambuddy.your-server.local/inventory?spool=42`) — if you set **Settings → External URL** to your public Bambuddy address, the QR uses that instead, so a phone outside your LAN can still resolve it.
 
-### Print or save
+### PDF or PNG
 
-The PDF opens in a new browser tab. From there you can either print directly to a label printer / sheet of blanks, or save the PDF and print later. Since rendering is server-side via [ReportLab](https://docs.reportlab.com/), the output is byte-identical across browsers — no "Chrome prints differently than Firefox" surprises.
+- **PDF** opens in a new browser tab. From there you can either print directly to a label printer / sheet of blanks, or save the PDF and print later. Since rendering is server-side via [ReportLab](https://docs.reportlab.com/), the output is byte-identical across browsers — no "Chrome prints differently than Firefox" surprises.
+- **PNG** is for label printer software that takes images, such as Brother P-touch Editor. Pick the resolution that matches your printer — **203 dpi** or **300 dpi** for most thermal label printers, **600 dpi** for high-resolution ones — so the image prints dot for dot, with a sharp QR code. The PNG carries its resolution, so it prints at the label's real size. One label downloads as a single PNG; several download as a ZIP with one PNG per label (`label-<id>.png`), or one per page for Avery sheets (`sheet-<n>.png`).
 
 ### Limits
 
