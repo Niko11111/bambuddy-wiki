@@ -227,6 +227,17 @@ AMS Lite units (e.g., A1 series) have no weight sensor and always report 0% fill
 
 When Spoolman data is used, the hover card displays "(Spoolman)" next to the fill percentage so you can distinguish the data source.
 
+#### Empty Spool Weight (Tare)
+
+When you weigh a spool in Bambuddy or on a SpoolBuddy scale, the remaining weight is the scale reading minus the empty spool weight. Bambuddy takes that weight from Spoolman in the same order Spoolman does:
+
+1. The spool's own **Spool Weight**
+2. The filament's **Spool Weight**
+3. The vendor's **Empty Spool Weight**
+4. 250 g, if none of the three is set
+
+The **Empty Spool Weight** shown in the spool form comes from the same order. Setting it once on the vendor covers every spool of that vendor that has no weight of its own.
+
 ### Opening Linked Spools
 
 For spools already linked to Spoolman:
