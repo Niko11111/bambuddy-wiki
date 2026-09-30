@@ -41,6 +41,17 @@ The Queue tab lets you:
 !!! warning "SD Card Required"
     An SD card must be inserted in your printer for the print queue to work. Files are transferred to the printer's SD card when prints start.
 
+### Filament shown on queue cards
+
+Since 1.2.6 ([#3132](https://github.com/maziggy/bambuddy/issues/3132)) each queue row shows a colour swatch and name for every filament the job uses, so you can check the next colours without opening **Edit Queue Item**. The row shows what the job is set to print with, not just the colour stored in the 3MF:
+
+- **Jobs mapped to AMS slots** on a specific printer show the slot, the spool assigned to it in Inventory (or Spoolman) and its colour, read from the printer's current AMS contents, for example `A1 · eSUN PLA Basic · Bone White`. Slots are labelled `A1`–`A4`, `B1`–`B4` and so on, `HT-A` for an AMS-HT, and `External` (or `Ext-L` / `Ext-R` on dual-nozzle printers) for the external spool. The mapping comes from [AMS Filament Mapping](#ams-filament-mapping).
+- **Jobs without a slot mapping** show the colour chosen when queueing, or otherwise the selected plate's colour from the 3MF, with no slot. That covers model-based jobs such as **Any P2S**, jobs on a specific printer with no stored mapping, and mapped jobs whose printer isn't currently reporting that slot.
+- **Up to two filaments** get a swatch and label each. With more than two, the row shows just the swatches; hover over them to see the full list (touch screens have no hover, so open the job instead).
+
+!!! warning "Emptied slots"
+    If a mapped slot has been emptied since the job was queued, the row says so in yellow, for example `A3 · Empty · Caramel`: the job will still be sent to that slot, so load a spool or edit the mapping. It uses the same check as the Printers page, so a slot shown there as `?` (typically a spool without an RFID tag) is not reported as empty. The external spool is never reported as empty, because the printer doesn't say whether one is loaded.
+
 ### Per-job ETA
 
 Since 1.2.6 ([#2736](https://github.com/maziggy/bambuddy/issues/2736)) a queue row shows an **ETA** beside its print duration — the clock time the job would finish if it started now, in your configured 12/24-hour format. It is a per-job answer, not a forecast of the whole queue.
