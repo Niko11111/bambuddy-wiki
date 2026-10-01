@@ -170,6 +170,7 @@ nav:
     - Maintenance & Security:
       - Maintenance Tracker: features/maintenance.md
       - Firmware Updates: features/firmware-updates.md
+      - Announcements: features/announcements.md
       - File Manager: features/file-manager.md
       - Backup & Restore: features/backup.md
       - PostgreSQL Support: features/postgresql.md
