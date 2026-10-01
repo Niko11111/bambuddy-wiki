@@ -8,6 +8,7 @@ When enabled, authentication provides:
 
 - **User Accounts**: Create multiple users with unique credentials
 - **Group-Based Permissions**: 80+ granular permissions organized by feature
+- **Printer Access per Group**: Limit a team to its own printers on a shared fleet
 - **Customizable Groups**: Create custom groups or use default system groups
 - **Secure Authentication**: JWT tokens with password hashing using PBKDF2
 - **User Activity Tracking**: See who uploaded archives, library files, queued prints, and started prints
@@ -79,6 +80,40 @@ Library **folders** never track an owner, so deleting a folder with contents req
 ### Users in Multiple Groups
 
 Users can belong to multiple groups. Permissions are **additive** - a user has all permissions from all their groups combined.
+
+### Printer Access
+
+Permissions decide *what* a user may do. **Printer access** decides *on which printers*. Use it when several teams share one Bambuddy, or to keep a printer free for a training session.
+
+In the group editor, switch on **Only show members the selected printers** and tick the printers. Members of that group then see and control only those printers:
+
+- The printer list and dashboard, camera streams, the queue and batches, archives, projects, statistics, print log, pipeline runs, maintenance, smart plugs, spool assignments, scheduled drying, failure detection and firmware leave the other printers out.
+- Live updates for the other printers don't reach them.
+- Opening one of the other printers, or an archive or job from one, by its address answers as if it didn't exist.
+
+How it combines:
+
+| Situation | Printers the user sees |
+|-----------|------------------------|
+| In no group with printer access switched on | All printers (the default, so nothing changes until you limit a group) |
+| In one limited group | That group's printers |
+| In several limited groups | All of those groups' printers together |
+| In a limited group and in a group without the switch (e.g. Operators) | Only the limited group's printers. A group without the switch never widens access |
+| In a limited group with no printers ticked | None |
+| Administrator | All printers, always |
+
+A typical setup keeps the permissions in one group (for example **Operators**) and the printers in a second group per team (**Team A**, **Team B**), and puts each user in both.
+
+Things that follow the same rule:
+
+- **API keys** reach only the printers of the user who created them, even if the key itself allows more. A key limited to some printers has to queue to a specific printer: "Any <model>" jobs and pipelines aimed at a printer class are refused for it. See [API Keys](api-keys.md).
+- **Camera stream links, Cam Wall and streaming-overlay tokens** show only the printers of whoever created them.
+- **Queued jobs**: a job for "Any <model>" only goes to a printer its owner may use. A job pinned to a printer that was later taken away from its owner waits, showing the reason, until access returns or you move it to another printer. Deleting a limited user while keeping their items stages their "Any <model>" jobs for a manual start, so you decide where they run.
+
+Newly added printers are not in any limited group until you tick them there, so limited users won't see them straight away.
+
+!!! note
+    Printer access limits what Bambuddy shows and does. It cannot stop someone who has a printer's access code from sending a job to it directly from a slicer on the network.
 
 ## Enabling Authentication
 
@@ -171,7 +206,7 @@ Note: You cannot delete yourself or the last administrator. Ownerless items requ
 ### Editing Groups
 
 1. Click the edit icon next to a group — this opens the full-page group editor
-2. Modify name, description, or permissions
+2. Modify name, description, permissions, or [printer access](#printer-access)
 3. Click **Save**
 
 Note: System groups (Administrators, Operators, Viewers) cannot be deleted.

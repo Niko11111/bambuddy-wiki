@@ -150,6 +150,9 @@ restore, firmware installs). The ten toggles you can set on a key are:
     user who created it, and is limited to the permissions **that user** holds
     through their groups — ticking **Control Printer** on a key created by
     someone who may not control printers does not give the key that ability.
+    The same goes for printers: a key reaches only printers its owner may see
+    (see [Printer Access](authentication.md#printer-access)), and a printer it
+    can't reach answers `404 Not Found`, as if it didn't exist.
     Deactivating or deleting a user disables their keys along with their login.
 
     Two consequences worth planning around:
