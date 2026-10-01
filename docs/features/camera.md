@@ -920,6 +920,25 @@ When no print is running, the overlay shows:
 - Check that camera streaming works in Bambuddy directly
 - The overlay uses the same camera stream as the main app
 
+**Camera freezes after running for a while**
+
+The overlay renews its camera connection every 60 seconds, even if the browser
+reports no image error. Reported image errors retry after three seconds. Each
+new connection starts a fresh 60-second renewal period. The overlay keeps its
+saved URL, token, FPS setting, rotation, and status display during renewal.
+Recovery is disabled in status-only mode (`camera=false`).
+
+Healthy connections are renewed too. A renewal joins the camera stream
+Bambuddy already has open for the printer and shows the latest frame at once,
+so a working picture doesn't flicker. Renewal can't bring back a printer that
+is offline or whose camera has stopped: the overlay picks the picture up again
+once the printer sends frames.
+
+If the camera remains frozen, check whether it works on Bambuddy's printers
+page, then try refreshing the browser source. When reporting the problem,
+include your Bambuddy version, browser-source application, and approximate time
+until the freeze. Do not share the token or full private overlay URL.
+
 **Status not updating**
 
 - WebSocket connection may have failed
