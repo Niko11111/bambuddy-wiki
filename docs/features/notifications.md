@@ -451,7 +451,7 @@ When a camera snapshot is available (e.g. First Layer Complete, Print Started, P
 | **Missing Spool Assignment** | Print started with required AMS trays that have no assigned spool (off by default) |
 | **First Layer Complete** | First layer finished — check adhesion remotely (includes camera snapshot) |
 | **Bed Cooled** | Bed temperature dropped below threshold after print (configurable in Settings) |
-| **Progress Milestones** | At 25%, 50%, 75% |
+| **Progress Milestones** | At 25%, 50%, 75%, counted from the first printed layer. Some printers report a meaningless percentage while they heat and calibrate, so nothing fires before layer 1. A printer that reaches layer 1 already past a milestone sends that one milestone then. |
 
 ### Printer Events
 
