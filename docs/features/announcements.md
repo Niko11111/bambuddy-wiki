@@ -11,11 +11,13 @@ Short messages from the Bambuddy maintainers, shown inside Bambuddy: security fi
 
 ## :material-bullhorn: Where they show up
 
-- **Sidebar:** an **Announcements** entry appears at the bottom of the sidebar, above the System icon, while there is at least one. A count shows how many you haven't read. With the sidebar collapsed it is a megaphone icon with a dot.
-- **List:** click it to open the list. Opening it marks everything in it as read; messages you hadn't read yet keep a **New** chip until you close it.
-- **Banner:** **important** and **critical** messages also show a banner above the page until you click **Got it** or open the list. **Info** messages never show a banner.
+- **Sidebar:** a megaphone icon appears at the bottom of the sidebar, next to the System icon (directly above it when the sidebar is collapsed), while there is at least one message. A green badge shows how many you haven't read.
+- **List:** click it to open the list. Each message is one line (level, date, title) and opens when you click it. Unread messages have a green dot and a **New** label; opening a message marks it read.
+- **Banner:** **important** and **critical** messages also show a banner above the page until you click **Got it** or open the message (**Read more** opens it straight away). **Info** messages never show a banner.
 
 Read state is stored per user on the server, so a message you dismissed stays dismissed in every browser you sign in with.
+
+**Earlier:** messages past their expiry move to a collapsed **Earlier** section at the bottom of the list, so you can still open them. History covers the last 12 months, up to 50 messages; it never counts as unread or shows a banner. Messages the maintainers **withdraw** (because they were wrong) are removed everywhere and don't appear in the history.
 
 Messages are plain text. A message can carry one link, and only to `github.com` or `bambuddy.cool` (including `wiki.bambuddy.cool`); Bambuddy refuses any other link.
 
@@ -23,7 +25,7 @@ Messages are plain text. A message can carry one link, and only to `github.com` 
 
 ## :material-shield-check: What Bambuddy fetches
 
-Bambuddy downloads one file, at startup and then every 6 hours:
+Bambuddy downloads one file, a minute after startup and then every 6 hours:
 
 ```
 https://raw.githubusercontent.com/maziggy/bambuddy-notifications/main/feed.json
@@ -32,6 +34,8 @@ https://raw.githubusercontent.com/maziggy/bambuddy-notifications/main/feed.json
 - It is a plain request to GitHub, the same host the update check uses. **No Bambuddy server is contacted.**
 - **Nothing about your install is sent:** no ID, no version, no settings.
 - Whether a message applies to you (Bambuddy version, beta channel, install type) is decided by your install, from what is in the file.
+
+A new message therefore reaches a running install within about 6 hours (GitHub can also cache the file for up to 5 minutes). Once it arrives, it appears on any open Bambuddy page without a reload.
 
 The file is public, and its [history](https://github.com/maziggy/bambuddy-notifications/commits/main) is the full record of every message ever sent, edited or withdrawn.
 
