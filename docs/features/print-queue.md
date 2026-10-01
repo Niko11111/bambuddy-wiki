@@ -1374,6 +1374,9 @@ A persistent toast notification shows real-time dispatch progress:
 !!! warning "If a printer takes the file but never starts"
     Bambuddy waits for the printer to actually begin printing after it accepts the file. If it never does, the job is put back in the queue and dispatched again — but only up to **three** times. After that the item is marked failed rather than re-uploading the same file indefinitely, because at that point the fault is on the printer: check its screen for a prompt or an error, and check that its SD card is inserted and readable.
 
+!!! info "If the file never reaches the printer"
+    When the printer's file service refuses the upload, does not answer, or drops the connection, the job stays in the queue instead of failing, and Bambuddy sends that printer no new jobs for five minutes. Jobs for any printer of that model go to the others. A job assigned to that printer shows *"&lt;printer&gt; is not accepting files — retrying in a few minutes"* and is sent again once the five minutes are up. A rejected access code, a full or missing SD card, or an upload too slow to finish still fails the job, because sending it again would fail the same way.
+
 ---
 
 ## :material-lightbulb: Tips
