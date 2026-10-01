@@ -11,7 +11,7 @@ Short messages from the Bambuddy maintainers, shown inside Bambuddy: security fi
 
 ## :material-bullhorn: Where they show up
 
-- **Sidebar:** a megaphone icon appears at the bottom of the sidebar, next to the System icon (directly above it when the sidebar is collapsed), while there is at least one message. A green badge shows how many you haven't read.
+- **Sidebar:** a megaphone icon appears at the bottom of the sidebar, next to the System icon (directly above it when the sidebar is collapsed), for everyone who may see announcements, also when there are none. A green badge shows how many you haven't read.
 - **List:** click it to open the list. Each message is one line (level, date, title) and opens when you click it. Unread messages have a green dot and a **New** label; opening a message marks it read.
 - **Banner:** **important** and **critical** messages also show a banner above the page until you click **Got it** or open the message (**Read more** opens it straight away). **Info** messages never show a banner.
 
