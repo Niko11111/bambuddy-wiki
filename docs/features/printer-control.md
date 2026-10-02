@@ -7,8 +7,8 @@ description: Print from printer cards, view printer info, control print speed, c
 
 Bambuddy provides control over various printer settings and features directly from the web interface.
 
-!!! info "Refreshed printer card in 0.2.5b2"
-    The printer card was redesigned in 0.2.5b2 with a tighter layout, popovers for all controls (temperature setpoints, fan speeds, jog), and a bottom-aligned power row. Quick-select values in the popovers are user-customizable under **Settings → Workflow → Temperature & Fan Presets**.
+!!! info "Refreshed printer card in 0.2.4.8"
+    The printer card was redesigned in 0.2.4.8 with a tighter layout, popovers for all controls (temperature setpoints, fan speeds, jog), and a bottom-aligned power row. Quick-select values in the popovers are user-customizable under **Settings → Workflow → Temperature & Fan Presets**.
 
 ---
 

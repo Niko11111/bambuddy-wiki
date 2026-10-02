@@ -388,7 +388,7 @@ The standard tier carries full metadata of its own. A bundled preset states its 
 
 ---
 
-## :material-package-variant-closed-remove: Slicer Bundles (removed in 0.2.5)
+## :material-package-variant-closed-remove: Slicer Bundles (removed in 0.2.4.7)
 
 Bundle import as a managed unit &mdash; the old **Settings &rarr; Slicer &rarr; Slicer Bundles** panel that let you upload a `.bbscfg` and pick its printer + process + filament triplet from a single dropdown &mdash; was removed in 0.2.5. The panel itself was left in place as a notice for one release cycle and is now gone from Settings entirely.
 
