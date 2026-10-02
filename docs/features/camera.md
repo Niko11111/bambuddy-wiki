@@ -482,6 +482,12 @@ When a stall is detected:
 !!! tip "Network Interruptions"
     If your network briefly drops, the stream will automatically recover once the connection is restored.
 
+### Frozen Picture
+
+Bambuddy also watches what the camera sends, not only that it sends something. A built-in (RTSP) camera that keeps sending the same frame for 20 seconds counts as frozen. This happens when the connection to the printer has dropped but `ffmpeg` keeps repeating its last frame. Bambuddy then restarts `ffmpeg` and reconnects to the printer, and open viewers stay connected. The log shows `RTSP output frozen … restarting ffmpeg` when this happens.
+
+A working camera practically never sends two identical frames, because sensor noise changes every one. In a completely dark chamber the picture can come out identical, though, and the stream may then restart every 20 seconds or so.
+
 ---
 
 ## :material-stethoscope: Built-in Camera Diagnostic
