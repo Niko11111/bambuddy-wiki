@@ -18,7 +18,7 @@ imported, and standard bundled presets.
 
 Orca Cloud Profiles lets you:
 
-- **Sign in** to your Orca Cloud account from Bambuddy (four providers)
+- **Connect** your Orca Cloud account to Bambuddy by approving a pairing code
 - **View** all profiles your Orca account has synced — filament, process, printer
 - **Slice** with Orca profiles directly from the Bambuddy SliceModal
 - **Assign** an Orca filament profile to an AMS slot from the Configure modal
@@ -30,37 +30,19 @@ The integration is read-only on the Orca Cloud side — Bambuddy lists and uses 
 
 ## :material-key: Connecting
 
-### Sign-in providers
+### Pairing with Orca Cloud
 
-Bambuddy offers four ways to sign in:
-
-| Provider | Flow |
-|----------|------|
-| **Email + password** *(default)* | Submit credentials directly to Orca's auth backend; no browser redirect |
-| **Google** | Browser-based OAuth via Orca's Supabase auth |
-| **GitHub** | Browser-based OAuth via Orca's Supabase auth |
-| **Apple** | Browser-based OAuth via Orca's Supabase auth |
-
-### Email + password sign-in
+Bambuddy connects to Orca Cloud by **approving a pairing code**. There is no password to enter in Bambuddy and no redirect URL to copy.
 
 1. Open **Profiles** → **Orca Cloud** tab
-2. Click **Sign in with email and password** (the primary button)
-3. Enter your Orca account credentials
-4. Click **Sign in**
+2. Click **Connect Orca Cloud**
+3. Bambuddy shows a short **pairing code**. Click **Open Orca Cloud approval page**, or go to the address shown under the code and enter it there
+4. Sign in to Orca Cloud in that tab if asked, and approve the code
+5. Bambuddy connects on its own as soon as you approve. The dialog shows *Waiting for you to approve…* until then
 
-That's it — no paste step, no browser redirect.
+The code expires after 10 minutes. If it does, or if the pairing was denied, click **Connect Orca Cloud** again for a new one.
 
-### OAuth sign-in (Google / GitHub / Apple)
-
-1. Open **Profiles** → **Orca Cloud** tab
-2. Click the provider you want
-3. A new tab opens at Orca's sign-in page — complete authentication there
-4. Your browser will try to load a `localhost:41172/callback` URL and show *"This site can't be reached"* — **that's expected**, not an error
-5. Copy the full URL from your browser's address bar
-6. Paste it into the textarea in Bambuddy and click **Finish connecting**
-
-!!! warning "The localhost page failing IS the expected state"
-    Orca Cloud's Supabase project only allows `localhost` as an OAuth callback target. Bambuddy isn't running on your browser's localhost, so the redirect can't reach Bambuddy directly — you ferry the URL across manually. This is the same friction OrcaSlicer's own desktop client navigates internally, just exposed to you in Bambuddy's case. The open feature request to broaden the allowlist is at [OrcaSlicer/OrcaSlicer#14028](https://github.com/OrcaSlicer/OrcaSlicer/issues/14028).
+Bambuddy asks for **read-only** access: it lists and views your profiles and nothing more. The pairing stays valid without signing in again, and it works the same whether you reach Bambuddy by LAN IP, `localhost` or through a reverse proxy. **Disconnect** on the tab ends it.
 
 ### After signing in
 
