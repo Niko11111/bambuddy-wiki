@@ -375,6 +375,9 @@ AMS slot configuration tells the **printer** what filament profile to use for a 
     - **Assign Spool**: Links an inventory spool to a slot for tracking (weight, usage history, cost) **and automatically configures the slot** with the spool's filament profile, color, and K-profile. Works on both configured and empty slots.
     - **Configure Slot**: Manually sends a specific filament profile to the printer. Useful when you want to override the auto-configured settings or set up a slot without an inventory spool.
 
+!!! note "A lost K-profile is put back"
+    A printer can drop a slot's K-profile selection, for example after a power cycle, and fall back to the default K. While the printer is idle, Bambuddy notices this on any slot with an assigned spool and re-selects the spool's stored K-profile for that printer and nozzle. The queue checks the same thing for a job's slots right before sending it. A *different* profile chosen in Bambu Studio or in Configure Slot is left alone, and so is **Default** chosen in Configure Slot. If a profile won't stick after three tries (for example because it was deleted on the printer), the log says so and Bambuddy stops retrying until the slot changes.
+
 #### Where Configure Slot Presets Come From
 
 The preset list in the Configure Slot modal comes from the same three sources as the spool form, but filtered by printer model:
