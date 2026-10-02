@@ -85,7 +85,12 @@ Users can belong to multiple groups. Permissions are **additive** - a user has a
 
 Permissions decide *what* a user may do. **Printer access** decides *on which printers*. Use it when several teams share one Bambuddy, or to keep a printer free for a training session.
 
-In the group editor, switch on **Only show members the selected printers** and tick the printers. Members of that group then see and control only those printers:
+Printer access has its own page: **Settings → Authentication → Printer access** (admins only). Pick a group, switch on **Limit members to the printers and locations chosen here**, and choose what the group may use:
+
+- **Whole location**: every printer whose location matches, now and later. A printer added to "Lab A" reaches the Lab A team without anyone ticking it.
+- **Single printers**: tick them one by one, on top of any locations.
+
+Members of that group then see and control only those printers:
 
 - The printer list and dashboard, camera streams, the queue and batches, archives, projects, statistics, print log, pipeline runs, maintenance, smart plugs, spool assignments, scheduled drying, failure detection and firmware leave the other printers out.
 - Live updates for the other printers don't reach them.
@@ -99,7 +104,7 @@ How it combines:
 | In one limited group | That group's printers |
 | In several limited groups | All of those groups' printers together |
 | In a limited group and in a group without the switch (e.g. Operators) | Only the limited group's printers. A group without the switch never widens access |
-| In a limited group with no printers ticked | None |
+| In a limited group with no printers or locations chosen | None |
 | Administrator | All printers, always |
 
 A typical setup keeps the permissions in one group (for example **Operators**) and the printers in a second group per team (**Team A**, **Team B**), and puts each user in both.
@@ -110,7 +115,21 @@ Things that follow the same rule:
 - **Camera stream links, Cam Wall and streaming-overlay tokens** show only the printers of whoever created them.
 - **Queued jobs**: a job for "Any <model>" only goes to a printer its owner may use. A job pinned to a printer that was later taken away from its owner waits, showing the reason, until access returns or you move it to another printer. Deleting a limited user while keeping their items stages their "Any <model>" jobs for a manual start, so you decide where they run.
 
-Newly added printers are not in any limited group until you tick them there, so limited users won't see them straight away.
+#### Working with many printers and groups
+
+- **By group** lists the groups on the left, with a search and a filter for limited and not limited groups. On the right, the selected group's printers are grouped by location. Each location shows how many of its printers the group reaches and has a **Whole location** box.
+- Search by name, model, serial or location, and filter by location, model, or whether the group has access. **Tick all shown** and **Untick all shown** act only on the printers the filters leave, so "all X1C in Lab B" is one search and one click.
+- **By printer** lists every printer with the limited groups that reach it. A group that reaches it through its location is marked with a pin and is changed under **By group**. A group that has it ticked can be removed there, and **Give access to…** adds one. The page also names the users who are in no limited group, because they see every printer whatever the groups say.
+- **Who has access** in a printer card's menu opens **By printer** on that printer.
+- Changes from either view are collected and saved together, or discarded, from the bar at the bottom.
+
+A location given to a group that no printer has any more (renamed or emptied) stays listed with the group so you can remove it.
+
+#### Moving printers between locations
+
+With locations given to groups, a printer's location is an access setting. The printer edit dialog names the groups a move affects, and only an admin can move a printer into or out of a location a limited group has. Locations are matched exactly, apart from leading and trailing spaces, which are removed when you save the printer.
+
+Printers you add are only reached by limited groups that have the printer's location. Otherwise, tick them for each group that should have them.
 
 !!! note
     Printer access limits what Bambuddy shows and does. It cannot stop someone who has a printer's access code from sending a job to it directly from a slicer on the network.
@@ -206,7 +225,7 @@ Note: You cannot delete yourself or the last administrator. Ownerless items requ
 ### Editing Groups
 
 1. Click the edit icon next to a group — this opens the full-page group editor
-2. Modify name, description, permissions, or [printer access](#printer-access)
+2. Modify name, description or permissions. The editor shows a summary of the group's [printer access](#printer-access) with a link to change it
 3. Click **Save**
 
 Note: System groups (Administrators, Operators, Viewers) cannot be deleted.
