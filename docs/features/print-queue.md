@@ -563,6 +563,9 @@ Use Queue Only to:
 !!! tip "Batch Workflow"
     Add multiple prints with Manual Start, review the order, then release them one by one or all at once.
 
+!!! note "Jobs that wait for review"
+    For users without **Print Without Review**, every job waits like this, shown as **Waiting for review**, and only someone who can manage all queue jobs can start it. See [Jobs That Wait for Review](authentication.md#jobs-that-wait-for-review).
+
 ---
 
 ## :material-fire: Preheat & Heat Soak

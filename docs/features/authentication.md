@@ -32,7 +32,7 @@ Permissions follow a `resource:action` pattern. Categories include:
 
 - **Printers**: read, create, update, delete, control, files, ams_rfid, clear_plate
 - **Archives**: read, create, update_own, update_all, delete_own, delete_all, reprint_own, reprint_all
-- **Queue**: read, create, update_own, update_all, delete_own, delete_all, reorder
+- **Queue**: read, create, update_own, update_all, delete_own, delete_all, reorder, start_unreviewed
 - **Library**: read, upload, update_own, update_all, delete_own, delete_all
 - **Projects**: read, create, update, delete
 - **Inventory**: read, create, update, delete, view_assignments
@@ -80,6 +80,18 @@ Library **folders** never track an owner, so deleting a folder with contents req
 ### Users in Multiple Groups
 
 Users can belong to multiple groups. Permissions are **additive** - a user has all permissions from all their groups combined.
+
+### Jobs That Wait for Review
+
+Use this when staff should look at every job before it prints, for example in a school or FabLab where students submit their own jobs.
+
+Without **Print Without Review** (`queue:start_unreviewed`), a user can still queue jobs, but every job they queue waits with a **Waiting for review** badge until someone with `queue:update_all` starts it with :material-play: **Play**. The print dialog tells them so. They can't start their waiting jobs themselves, also not by switching off manual start in the editor, and they can't start jobs from a virtual printer that have no owner yet.
+
+To set it up, create a group for the students with `queue:create` and the "own" queue permissions, and leave **Print Without Review** off. Give the staff `queue:update_all`. Combined with "own" read permissions, students only see their own jobs and files.
+
+It applies to every way a job is queued: the print dialog, the file manager, more runs of a batch, pipelines, API keys and the webhook. A key queues like its owner, and a key whose owner needs review can't start waiting jobs through the webhook.
+
+Administrators and the Operators group have the permission. On upgrade, every group that could queue or control printers was given it once, so nothing changes until you take it away from a group.
 
 ### Printer Access
 
