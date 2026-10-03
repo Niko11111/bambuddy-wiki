@@ -262,7 +262,7 @@ Search, sorting (by name or by number of printers) and **Hide empty** help find 
     A location name can be up to 100 characters. Two locations that differ only in upper and lower case ("Workshop" and "workshop") are not allowed, because jobs match a location by its exact name.
 
 !!! tip "Queued jobs"
-    Renaming a location updates queued jobs that target it. Deleting one does not: a job aimed at that location keeps waiting rather than starting on a printer somewhere else, so edit or cancel such jobs yourself.
+    Renaming a location updates the queued jobs that target it, and the batches that will queue more runs for it. Deleting one does not: a job aimed at that location keeps waiting rather than starting on a printer somewhere else, so edit or cancel such jobs yourself.
 
 Viewing the page needs permission to see printers; changing locations needs permission to edit printers. You can still type a location into a printer's settings; it shows up on the page like any other.
 
