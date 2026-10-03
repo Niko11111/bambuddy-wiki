@@ -237,6 +237,35 @@ Each action button is **smart-enabled** — it only activates when at least one 
 
 ---
 
+## :material-map-marker-multiple: Printer Locations
+
+A location groups printers by where they stand: a room, a rack, a shelf. Queue jobs can target "any printer of this model in this location", and the Printers page can select every printer at a location at once.
+
+Open the **Printer Locations** page with the button next to the sort control at the top of the Printers page. It lists every location with how many printers it holds; click one to see its printers and whether each is idle, printing, paused or offline. Printers without a location are listed at the bottom.
+
+| Action | How |
+|--------|-----|
+| **Create a location** | **New Location**. A location can be empty, so you can set up a rack or room before its printers move in. |
+| **Icon and colour** | Pick them when creating or editing a location. The colour shows as a stripe next to the icon. |
+| **Rename** | The pencil button. Every printer in the location and every queued job that targets it move to the new name together. |
+| **Move one printer** | The move button on the printer's row, then pick a location or **No location**. |
+| **Move several printers** | Tick them (or **Select all** for printers without a location), then **Move** in the bar at the bottom. |
+| **Remove a printer from a location** | The remove button on its row. The printer stays, without a location. |
+| **Delete locations** | The bin button on one location, or **Select** to tick several and **Delete selected**. Their printers are kept, without a location. |
+
+Search, sorting (by name or by number of printers) and **Hide empty** help find a location on a large farm; Bambuddy remembers the sorting and the hide setting in your browser.
+
+!!! info "Shared by every user"
+    Locations, their icons and colours are stored by Bambuddy, not in the browser, so every user and device sees the same ones. Each change is saved in one step: a failure never leaves a location half renamed.
+
+!!! note "Names"
+    A location name can be up to 100 characters. Two locations that differ only in upper and lower case ("Workshop" and "workshop") are not allowed, because jobs match a location by its exact name.
+
+!!! tip "Queued jobs"
+    Renaming a location updates queued jobs that target it. Deleting one does not: a job aimed at that location keeps waiting rather than starting on a printer somewhere else, so edit or cancel such jobs yourself.
+
+Viewing the page needs permission to see printers; changing locations needs permission to edit printers. You can still type a location into a printer's settings; it shows up on the page like any other.
+
 ## :material-skip-forward: Skip Objects
 
 Skip individual objects during a print without stopping the entire job.
