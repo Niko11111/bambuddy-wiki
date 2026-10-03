@@ -1036,6 +1036,19 @@ filename, which is why the overlay scope is distinct from `camwall`.
 
 ---
 
+### Overlay branding logo
+
+All paths below are relative to `/api/v1`. The logo is shared by the installation.
+
+| Method | Path | Purpose | Permission when login is enabled |
+|--------|------|---------|----------------------------------|
+| `POST` | `/settings/overlay-logo` | Upload multipart `file` | `settings:update` |
+| `GET` | `/settings/overlay-logo` | Read PNG for settings preview | `settings:read` |
+| `DELETE` | `/settings/overlay-logo` | Remove saved logo | `settings:update` |
+| `GET` | `/overlay-branding/logo?token=...` | Read PNG for OBS | Valid `overlay` token |
+
+Uploads accept static PNG and WebP images up to 2 MiB and 4 million pixels. Images are decoded, resized to fit 512 × 512, and stored as PNG with transparency. Invalid images return `400`; oversized uploads return `413`. Reading a missing logo returns `404`. Reads use `Cache-Control: no-store`. Upload and delete return `{"status":"ok"}`. Deleting an absent logo succeeds.
+
 ## :material-cog: System
 
 ### System Info
