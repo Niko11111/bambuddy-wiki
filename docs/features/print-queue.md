@@ -135,7 +135,9 @@ You do not have to pick anything. Positions are assigned for you, preferring one
     Stopping is deliberate: printing from a hotend other than the one the plate was levelled with puts the first layer millimetres above the plate.
 
 !!! tip "Stored Mappings"
-    AMS mappings are saved when you add a print to the queue. When the print starts, Bambuddy uses your configured mapping instead of auto-matching again.
+    AMS mappings are saved when you add a print to the queue. When the print starts, Bambuddy checks the saved mapping against the trays the printer has loaded at that moment. If it still fits, it is used as saved, including any trays you picked by hand. If a slot now points at an empty tray or a tray holding a different material, the mapping is worked out again for that printer. That covers a spool moved after queueing, and a mapping that was made for another printer. A slot you deliberately put on a tray of another material in the mapping panel is kept as you chose it.
+
+    When the same job is queued to several printers at once, each printer gets its own mapping, matched against its own AMS.
 
 !!! info "Preset match and colour match are separate judgements"
     The filament preset ID (`tray_info_idx`) names the **variant**, not an individual spool &mdash; `GFA00` is PLA Basic, `GFA01` PLA Matte, `GFA17` PLA Translucent, whatever colour the spool is. So when your slice asks for PLA Matte and exactly one Matte spool is loaded, auto-match selects it because it is the right variant, *and then still checks the colour*. If the colour differs you get the amber **Color mismatch** status on that slot rather than a green tick, and the slot stays selected so you can print anyway or pick another. Since [#2687](https://github.com/maziggy/bambuddy/issues/2687) the auto-matched and manually-picked verdicts for a given tray always agree.
@@ -1182,6 +1184,15 @@ The waiting reason tells you exactly what's needed:
 - **Waiting on \<sensor\>**: A [Home Assistant sensor](sensors.md#hold-prints-while-alerting)
   set to hold prints is alerting — an enclosure door left open, say. The job
   starts by itself once the sensor clears; nothing is cancelled.
+- **Needs \<filament\>** (e.g. "Needs PETG #2850E0"): the printer the job was
+  about to go to has no tray loaded with a filament the plate prints. Rather
+  than let the printer pick a substitute, the job is held for a manual start.
+  This applies to jobs on a specific printer too, not only model-based ones.
+  Load the spool and press **Start**: Bambuddy finds it and the job prints.
+  If the filament is still missing, **Start** names it and offers **Print
+  Anyway**, which sends the job the way it went out before. A model-based job gives its
+  printer back when it is held, so **Start** lets the queue choose among all
+  printers of that model again.
 
 ### Compatibility Warnings
 
