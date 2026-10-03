@@ -725,7 +725,7 @@ The overlay displays:
 1. In OBS, click **+** under Sources
 2. Select **Browser**
 3. Enter the overlay URL (e.g., `http://192.168.1.100:8000/overlay/1`)
-4. Set width and height to match your scene (e.g., 1920x1080)
+4. Set width and height to match your scene (e.g., 1920x1080, or 1080x1920 for a portrait URL)
 5. Click **OK**
 
 !!! tip "Single Source"
@@ -735,12 +735,42 @@ The overlay displays:
 
 !!! tip "Build the URL in the UI"
     **Settings → API Keys → Streaming Overlay** has a builder: pick the printer,
-    tick the fields you want, set size, artwork, frame rate and branding, paste in
-    a token if you need one, and copy the finished URL. It also has a preview so you can see
+    tick the fields you want, set layout, size, artwork, frame rate and branding,
+    paste in a token if you need one, and copy the finished URL. It also has a preview so you can see
     the result before pasting it into OBS. The parameters below are what it
     produces, documented for anyone assembling a URL by hand or scripting one.
 
 Customize the overlay using query parameters:
+
+#### Landscape, portrait, or both
+
+Choose **Layout** independently of **Artwork**. Both Classic and Version 2 support all three choices:
+
+| Layout | URLs and previews | OBS browser-source dimensions |
+| --- | --- | --- |
+| Landscape, the default | One landscape URL and preview | 1920 × 1080 |
+| Portrait | One portrait URL and preview | 1080 × 1920 |
+| Both | Separate landscape and portrait URLs and simultaneous previews | One source at each size |
+
+Each URL has its own **Copy** and **Open** actions. In Both mode, add the two URLs as separate browser sources to your landscape and portrait scenes. They share the selected printer, fields, text size, camera visibility, frame rate, branding and token. They can run at the same time.
+
+**Show preview** starts only the selected previews. **Hide preview** or leaving the settings page removes them and closes their streams. Changes to the settings update both the URLs and visible previews. Previews use the recommended source dimensions, scaled down to fit the settings card.
+
+Landscape URLs omit the layout parameter to preserve Classic text sizing at any source resolution. Portrait URLs select a fixed composition:
+
+```text
+/overlay/1
+/overlay/1?layout=portrait
+/overlay/1?layout=portrait&artwork=2
+```
+
+Portrait URLs keep their 1080 × 1920 composition when opened in a differently sized browser window, scaled to fit with empty space where needed. OBS makes that space transparent; a normal browser tab shows the page background there. Use the recommended dimensions in OBS to fill the source. `both` is a builder choice, not a URL parameter. Landscape URLs keep their viewport behaviour, including Classic text sizing at 1280 × 720. Existing explicit `layout=landscape` URLs remain supported and use a fixed 1920 × 1080 canvas. Unrecognised layout values follow the viewport.
+
+Classic portrait uses larger, wrapping text and fits the camera without stretching it. Version 2 uses its portrait header, cropped camera and information panel. Both respect camera rotation. For all URLs, disconnected printers hide stale progress and temperatures, and finished prints do not also show an idle message. The Status toggle controls status text, including the offline message.
+
+![Both layouts in the overlay builder](../images/stream-overlay/layouts-after.png)
+
+*Version 2 with both previews. The image uses simulated data and a camera test pattern, not a live printer.*
 
 #### Size
 
@@ -804,7 +834,7 @@ Screenshots below show the layouts with simulated print data and a camera test p
 
 *Version 2, portrait*
 
-The layout follows the browser source viewport, including the builder preview. OBS scaling an existing landscape source into a portrait scene does not change its viewport; change the source's width and height instead.
+Without a `layout` parameter, Version 2 follows the browser source viewport. The builder omits this parameter for Landscape and adds `layout=portrait` for Portrait, as described above.
 
 The camera keeps its aspect ratio and fills the available area by cropping. Portrait cropping can hide the sides of the build plate. Camera rotation and the frame-rate setting still apply.
 
@@ -878,7 +908,7 @@ Available elements:
 | `layers` | Layer count (current/total) |
 | `eta` | Time remaining and ETA |
 | `filename` | Print file name |
-| `status` | Status text (Printing, Paused, etc.) |
+| `status` | Status text (Printing, Paused, etc.), including the offline message |
 | `printer` | Printer name |
 | `model` | Printer model (off by default; omitted if unknown) |
 | `nozzle` | Nozzle temperature (both nozzles on a dual-nozzle printer) |
@@ -937,8 +967,10 @@ They are **not** in the default set, so an overlay URL you are already using loo
 When no print is running, the overlay shows:
 
 - Camera feed (still active)
-- "Printer is idle" or "Printer offline" message
+- The status line, such as "Idle", "Finished" or "Printer offline", when `status` is in `show=`
 - Bambuddy logo
+
+Progress, layers, time remaining and temperatures are hidden while the printer is offline. Without `status` in `show=`, an idle or offline printer shows no status text.
 
 ### Troubleshooting
 
