@@ -75,7 +75,7 @@ For archives, queue items, and library files, permissions are split into "own" a
 
 Items created before authentication was enabled (or by deleted users) have no owner. These "ownerless" items require `*_all` permission to modify.
 
-Library **folders** never track an owner, so deleting a folder with contents requires `library:delete_all`. One exception: users with `library:delete_own` may delete **empty** folders (no subfolders, no files — including trashed ones); external and project/archive-linked folders always require `library:delete_all`. See [File Manager → Deleting Folders](file-manager.md#deleting-folders).
+Library **folders** have an owner too, the user who made them. With `library:read_own` a user sees only their own folders, folders an admin shared with everyone, and the folders holding their files; they add files only to their own and shared folders. `library:delete_own` deletes your own folder when everything in it is yours, or an empty folder without an owner. See [File Manager → Folder Ownership & Sharing](file-manager.md#folder-ownership-sharing) and [Deleting Folders](file-manager.md#deleting-folders).
 
 ### Users in Multiple Groups
 

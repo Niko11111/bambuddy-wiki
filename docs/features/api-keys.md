@@ -109,7 +109,7 @@ restore, firmware installs). The ten toggles you can set on a key are:
 | **Manage Archives** | Edit and delete print archives (`DELETE /archives/{id}`), including the `?purge_stats=true` option on that route which also drops the row from Quick Stats. Suits automations that prune the print history. Reprinting an archive stays under **Manage Queue**; the standalone bulk-purge operation stays admin-only. |
 | **Manage Projects** | Create, update and delete projects, and manage their membership (adding archives to a project). Suits automations that file finished prints into projects. Reading projects comes with **Read Status**. |
 | **Allow Cloud Access** | Read the owner's Bambu Cloud presets/filaments via `/cloud/*` (see below) |
-| **Update Electricity Price** | Push a new per-kWh tariff to `POST /settings/electricity-price` (see [Energy Tracking](energy.md#dynamic-electricity-price-from-home-assistant)) — narrowly scoped, the only settings field writable via API key |
+| **Update Electricity Price** | Push a new per-kWh tariff to `POST /settings/electricity-price` (see [Energy Tracking](energy.md#push-the-price-from-home-assistant)) — narrowly scoped, the only settings field writable via API key |
 | **Send Notifications** | Send a message through the notification channels that have **Messages from connected apps** on (`POST /notifications/app-message`, see [Notifications](notifications.md#messages-from-connected-apps)). For apps like Bambuddy Orders. Nothing else: the key can't read or change the channels. The key's owner needs the **notifications:update** permission |
 
 !!! warning "Allowlist model since 0.2.4.5 (GHSA-r2qv-8222-hqg3)"

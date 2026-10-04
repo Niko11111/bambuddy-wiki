@@ -116,6 +116,24 @@ Your library contains uploaded and archived files:
 - 3MF and sliced gcode files
 - Linked folders connected to projects/archives
 
+### Folder Ownership & Sharing
+
+Every folder has an owner, the user who made it. What you see of the folder tree depends on your library permission:
+
+- **`library:read_all`** (View all library files) — every folder.
+- **`library:read_own`** (View own library files) — your own folders, folders **shared with everyone**, folders that hold one of your files, and the folders above those so you can reach them. Other users' folders are hidden.
+
+A folder's file count and last-activity time only count the files you can see.
+
+**Sharing a folder.** Users with `library:update_all` can open a folder's menu (:material-dots-vertical:) and choose **Share with everyone**; **Stop sharing** undoes it. A shared folder shows a :material-account-multiple: icon. Everyone sees it and can add files and subfolders to it, but renaming and deleting it stays with its owner and admins. Sharing applies to that one folder: a folder inside it is shared only if it is marked too.
+
+**Where you can add files.** With `library:read_own` you can upload, extract ZIPs, move files, create subfolders and import from MakerWorld or Manyfold into your own folders, shared folders and the top level. In a folder you only pass through (one above your own files), **Upload** and **New Folder** are disabled, and the Move dialog greys it out.
+
+!!! example "A classroom"
+    The teacher creates **Class Project** and shares it. Each student sees **Class Project** and their own folders, and nothing of the other students. A student's subfolder inside **Class Project** belongs to the student and stays private to them, so the teacher sees everyone's work while students only see their own.
+
+**Folders from before this feature.** On upgrade, a folder whose files (subfolders and trashed files included) all belong to one user becomes that user's folder, and an empty folder inside it goes with it. Every other existing folder (empty, used by several people, linked to a project or archive, external, or the **MakerWorld** and **Manyfold** import folders) is shared, so it stays visible as before. Folders created while authentication is off have no owner and are shared too, so turning authentication on later hides nothing.
+
 ### File Information
 
 Each file shows:
@@ -705,11 +723,14 @@ Admins can also change how long trashed files live on the Trash page itself (1�
 
 ### Deleting Folders
 
-Folders have no owner, so deleting a folder **with contents** (a cascade delete of everything inside) requires the `library:delete_all` permission.
+Deleting a folder deletes everything inside it. With `library:delete_all` you can delete any folder.
 
-Users with only `library:delete_own` can still delete **empty** folders — for example a folder they created and have since emptied out. "Empty" is strict: the folder must contain no subfolders and no files, *including trashed files* (a trashed file still belongs to whoever deleted it and must stay restorable). External folders and folders linked to a project or archive always require `library:delete_all`, even when empty.
+With only `library:delete_own` you can delete:
 
-The folder tree's Delete entry reflects this: on a non-empty folder it is disabled with a "You can only delete empty folders" hint.
+- **your own folder**, when everything inside it is yours too: every subfolder and every file, *including trashed files* (a trashed file still belongs to whoever deleted it and must stay restorable);
+- **an empty folder without an owner** (one made before [folder ownership](#folder-ownership-sharing)), with no subfolders and no files, trashed ones included.
+
+External folders and folders linked to a project or archive always require `library:delete_all`, even when empty. The folder menu's Delete entry is disabled with a hint when you can't delete the folder.
 
 ---
 
@@ -767,6 +788,8 @@ Rename files and folders directly in the File Manager.
 4. Click **Rename** to save
 
 ### Renaming a Folder
+
+With `library:update_all` you can rename any folder; with `library:update_own`, your own folders. Linking a folder and sharing it need `library:update_all`.
 
 1. Hover over the folder in the sidebar (on a touch device its actions are always visible)
 2. Click the three-dot menu (:material-dots-vertical:)
