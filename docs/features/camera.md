@@ -799,6 +799,12 @@ The overlay displays:
     the result before pasting it into OBS. The parameters below are what it
     produces, documented for anyone assembling a URL by hand or scripting one.
 
+    The builder remembers your choices in the browser you used, so it reopens
+    as you left it. The token is never stored: enter or import it again, or
+    create a new one. **Reset choices** at the top puts every choice back to
+    its default and leaves the token and the uploaded logo alone. In another
+    browser, or for another admin, the builder starts from the defaults.
+
 Customize the overlay using query parameters:
 
 #### Landscape, portrait, or both
