@@ -258,6 +258,32 @@ Three things are never hidden:
 
 Switching the printer re-filters both dropdowns immediately and re-picks any selection the change left incompatible. [Re-slicing for a different printer](#re-slicing-for-a-different-printer) is fully supported, so the filter is a default view rather than a restriction &mdash; **Show all** is always one click away.
 
+### Only online printers and loaded spools
+
+When you slice away from the printer, the useful choices are the spools that are already in it. Two checkboxes above the **Printer profile** dropdown narrow the lists to that. Both are off until you turn them on, and your browser remembers them.
+
+- **Only printers that are online** &mdash; the **Printer profile** dropdown lists the models that are connected right now, at every nozzle size. If the profile Bambuddy picked for you is for a model that isn't online, it moves to one that is: the file's own printer when that model is online, otherwise the 0.4&nbsp;mm profile of an online model. A printer you picked yourself stays.
+- **Only spools that are loaded** &mdash; each **Filament profile** dropdown lists the profiles of the spools loaded in the online printers of the selected model. The automatic pick for each slot is made from those spools. A profile you picked yourself stays.
+
+Profiles the checkboxes hold back sit behind the same **Show all** link, in a **Not online** or **Not loaded** group. Bambuddy never filters down to an empty list. A printer profile whose model it can't read from the name, such as a renamed custom printer, always stays. When no printer is online, or no loaded spool matches a profile for the selected printer, the dialog says so and shows the full lists.
+
+Each filament row also has a **Pick** button. It opens a **Loaded spools** screen with one section per online printer of the selected model:
+
+- Each AMS is shown as its four slots, empty ones included, so it matches the unit.
+- AMS-HT units follow, then an external spool when one is in the holder.
+- Clicking a spool sets that row's profile and its colour, so the preview matches the spool.
+- A spool with no profile for the selected printer is shown greyed out and can't be picked.
+
+How a spool finds its profile, strongest first:
+
+1. **The profile set for the slot in Bambuddy**, the one shown on the printer card, when the slot hasn't been changed since and the profile is for the selected printer.
+2. **The same profile for the selected printer.** A profile set for an X1C finds the H2D copy with the same name when you slice for an H2D.
+3. **A spool set up from the slicer or the printer's screen.** Its brand text is used, so a Bambu "PLA Basic" spool finds **Bambu PLA Basic**, and a spool with no brand finds **Generic &lt;material&gt;**.
+
+A profile that states a different material from the spool is never matched. Spools are matched by their profile, not by material alone, so a loaded PLA doesn't bring in every PLA profile.
+
+Which printers you see here follows [printer access](authentication.md#printer-access), and the checkboxes only appear for users who may see printer status.
+
 ### Re-slicing for a different printer
 
 The **Printer** dropdown defaults to the printer the source 3MF was prepared for, but is not constrained to it. A 3MF sliced for an X1C can be re-sliced for an H2D (or any other model), and vice versa &mdash; pick the target printer and slice as normal. The slicer regenerates the G-code from scratch using the target printer's bed size, kinematics, nozzle count, and start/end G-code; only the model geometry and paint/colour assignments carry over from the source file.
