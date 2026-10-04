@@ -281,6 +281,31 @@ This creates a visual record of your completed prints!
 
 ---
 
+## :material-lightbulb-on: Chamber Light for the Camera
+
+If you keep the chamber light off between uses, the live view is black and the photos in your notifications are too. Bambuddy can switch the light on whenever the camera is used:
+
+1. Go to **Settings** > **Camera**
+2. In the camera card, find the printer and switch on **Turn on chamber light for camera**
+3. Optionally set **Wait before snapshot** (2 seconds by default, up to 30)
+
+The light then turns on:
+
+- while anyone watches the live view, including the camera wall and a [streaming overlay](#streaming-overlay-for-obs)
+- for automatic pictures: notification photos, the live finish photo, and the snapshot that Home Assistant and other automations fetch from `/camera/snapshot`
+
+It turns off again 15 seconds after the last use, so a viewer that reconnects or the camera wall's refresh doesn't make it flash.
+
+**Wait before snapshot** gives the light, and any room light Home Assistant syncs to it, time to come on before an automatic picture is taken. It only applies when the light was off; the live view never waits.
+
+!!! note "Bambuddy only turns off a light it turned on"
+    If the light was already on, it stays on. If you switch the light by hand on the printer card while the camera is in use, the light is yours again and stays as you set it.
+
+!!! note "What doesn't switch the light"
+    The layer timelapse, the Obico failure check and the frames Bambuddy keeps during a print for the finish photo capture all through a print, so the light would flash with every frame. They use whatever light the printer has. A finish photo taken from the printer's own timelapse video was filmed during the print, so it isn't lit either.
+
+---
+
 ## :material-scan-helper: Build Plate Empty Detection
 
 Automatically detect if objects are left on the build plate before a print starts. If detected, the print is immediately paused and you receive a notification.
