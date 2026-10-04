@@ -31,13 +31,12 @@ Connect external network cameras to replace the built-in printer camera. Useful 
 ### Configuration
 
 1. Go to **Settings** > **Camera**
-2. Find your printer in the camera card's list. With 8 printers or more, type part of its name or location into **Filter printers**
-3. Switch on **External** in the printer's row. Its camera fields open below the row
-4. Enter the camera URL
-5. Select the camera type, and the rotation if the camera is mounted turned
-6. Click **Test** to verify connection
+2. Under **External Cameras**, click **Add external camera**, then search for the printer by name or location and pick it. Its camera fields open
+3. Enter the camera URL
+4. Select the camera type, and the rotation if the camera is mounted turned
+5. Click **Test** to verify connection
 
-The fields fold away again when you open another printer. A closed row shows the camera type and where it points, such as `MJPEG · 192.168.1.61:1984`; click the arrow at the end of the row to open it again.
+The list shows only printers that have an external camera, so it stays short however many printers you run. A closed row shows the camera type and where it points, such as `MJPEG · 192.168.1.61:1984`; click the row to open its fields, and only one printer is open at a time. The bin icon at the end of a row switches that printer back to its built-in camera.
 
 !!! tip "RTSP Authentication"
     Include credentials in the URL: `rtsp://user:password@192.168.1.50:554/stream`
@@ -288,8 +287,12 @@ This creates a visual record of your completed prints!
 If you keep the chamber light off between uses, the live view is black and the photos in your notifications are too. Bambuddy can switch the light on whenever the camera is used:
 
 1. Go to **Settings** > **Camera**
-2. In the camera card's list, switch on **Light** in the printer's row
-3. Optionally set the printer's **Delay (s)**, the wait before a snapshot (2 seconds by default, up to 5)
+2. Under **Turn on chamber light for camera**, choose:
+    - **All printers**, so every printer does it, or
+    - **Selected printers**, then click **Add printer**, search for a printer by name or location and pick it. Each picked printer shows as a chip; click its **×** to take it off the list.
+3. Optionally set **Wait before snapshot** (2 seconds by default, up to 5). It applies to every printer.
+
+**Off** is the default, so no printer's light changes until you choose otherwise.
 
 The light then turns on:
 
