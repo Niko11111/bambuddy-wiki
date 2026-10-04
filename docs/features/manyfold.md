@@ -63,6 +63,21 @@ The client secret is never sent back to the browser and is left out of
   deleted from the library can be imported again.
 - Files are limited to 200 MB.
 
+### Importing several files
+
+- **In a model:** tick files, or tick **Select all**, then click **Import
+  selected**. **Import all** imports every printable file that isn't in the
+  library yet.
+- **From the grid:** tick models with the box in each card's corner, or
+  click **Select page**. The ticks stay while you page and search. **Import
+  their files** imports every printable file of those models that isn't in
+  the library yet, into the folder chosen next to it. **Clear selection**
+  removes all ticks.
+
+Files import one after another. A file that fails doesn't stop the rest;
+at the end a message says how many were imported, were already in the
+library, or failed, and names the ones that failed.
+
 ---
 
 ## :material-shield-account: Permissions
