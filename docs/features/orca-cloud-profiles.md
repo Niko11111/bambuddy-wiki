@@ -26,6 +26,9 @@ Orca Cloud Profiles lets you:
 
 The integration is read-only on the Orca Cloud side — Bambuddy lists and uses your profiles but doesn't create, edit, or delete them. Make changes in OrcaSlicer itself; refresh the tab in Bambuddy to pick them up.
 
+!!! note "Only your own presets are in Orca Cloud"
+    OrcaSlicer uploads presets you created or saved yourself. Ticking a built-in filament, such as *Elegoo PLA* or *PolyLite PLA*, in OrcaSlicer's filament list only shows it in your own OrcaSlicer, so it never reaches Orca Cloud or this tab. You don't need it there: with the OrcaSlicer sidecar, Bambuddy lists OrcaSlicer's built-in filaments in the **Standard** tier of the Slice dialog. To use your own changes to one, select it in OrcaSlicer and **Save as** a preset of your own; that copy syncs.
+
 ---
 
 ## :material-key: Connecting
