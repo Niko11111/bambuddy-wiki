@@ -418,6 +418,7 @@ LDAP groups can be mapped to BamBuddy groups for automatic role assignment. The 
 - Groups are found anywhere in the directory, not only under the **Search Base**, so a Search Base of `ou=people,dc=example,dc=com` still finds groups under `ou=groups,dc=example,dc=com`
 - A user's POSIX **primary** group — the one their `gidNumber` points at — counts as full membership, the same as Unix treats it
 - Group membership is synced on every login
+- [Printer access](#printer-access) follows the mapped groups: map a directory group to a group limited to its printers, and its members see only those. A change in the directory takes effect at the user's next login
 
 !!! tip "No Mapping? No Problem"
     If no group mapping is configured, LDAP users are created without any group. Admins can manually assign groups in BamBuddy afterward.
@@ -719,6 +720,9 @@ How the sync behaves:
   same rule the LDAP sync settled on after #1292.
 - **Revocation propagates.** Losing the IdP group removes the mapped BamBuddy
   group at the next login.
+- **[Printer access](#printer-access) follows the groups.** An IdP group mapped
+  to a group limited to its printers limits its members the same way, from
+  their next login.
 - **Matching is case-insensitive** on the IdP side, and a missing claim simply
   means "no mapped groups" — it never blocks a login that already
   authenticated. Neither does a sync that fails: the error is logged and the
