@@ -682,13 +682,42 @@ For example: `http://192.168.1.100:8000/overlay/1`
 
 ### Streaming Overlay token (login-enabled deployments)
 
-1. Go to **Settings → API Keys** (Camera API Tokens).
-2. Create a token with the **Streaming Overlay** scope. Copy the ready-made
-   overlay URL shown once on creation — it already includes the token.
-3. In the URL, set the printer number: `/overlay/1` is printer 1, `/overlay/2`
-   is printer 2, and so on (the number matches the printer's URL on the Printers
-   page).
-4. Paste that URL into OBS.
+1. Go to **Settings → API Keys → Streaming Overlay**.
+2. Choose **Create overlay token**, give it a name and expiry, and create it.
+   The builder uses the token returned at creation. You can also create one in
+   **Camera API Tokens** with the **Streaming Overlay** scope and copy it into
+   **Manual token**.
+3. Choose the printer and appearance settings, then choose **Copy** next to the
+   URL.
+4. Paste the complete URL into OBS and keep it somewhere safe.
+
+While a token is being created, Cancel, manual entry and import are disabled,
+so the token returned at creation cannot be lost. If creation fails, the
+server's error is shown and those controls become available again. Import is
+also unavailable while a logo upload or removal is running.
+
+Tokens are stored as hashes and cannot be retrieved later. The builder holds
+the token only in memory and clears it when you leave or reload the page.
+**Manual token** and the generated URL are masked until you choose **Show
+token**; **Copy** always copies the complete, working URL.
+
+To edit an existing browser source, paste its complete URL into **Existing
+overlay URL** and choose **Import URL**, or paste its token into **Manual
+token**. Import reads the URL in the browser; it does not contact the server
+in it. It takes the printer, token, layout, fields, text size, FPS, artwork,
+camera, background transparency and branding settings. Like the overlay page,
+it clamps FPS to 1–30 and ignores fields and parameters it doesn't know. A URL
+that isn't an overlay URL, has more than one token, or contains a user name or
+password is rejected without changing the current settings. The generated URL
+uses this Bambuddy installation, so check the selected printer when importing
+from another installation. Copy the updated URL back into OBS after changing
+settings.
+
+!!! note "Lost every copy of a URL?"
+    A token cannot be shown again. Create a new one, update your browser
+    sources, then revoke the old token.
+
+![Streaming Overlay builder with URL import and masked manual token entry](../assets/images/streaming-overlay/token-builder.png)
 
 The URL then looks like:
 
@@ -1032,7 +1061,7 @@ For Home Assistant, Frigate, kiosks, or any external integration that needs a st
 5. Pick a lifetime (1–365 days, default 90)
 6. Click **Create**
 
-The plaintext token is displayed **exactly once** in a copy-to-clipboard modal. Save it now — it can never be retrieved again.
+For every scope, the plaintext token is returned **exactly once**, at creation. Save it from the copy-to-clipboard modal, or copy the complete URL when creating a token directly in the [overlay builder](#streaming-overlay-token-login-enabled-deployments). It cannot be retrieved again.
 
 ### Scopes
 
@@ -1124,7 +1153,8 @@ http://your-bambuddy/camwall?token=bblt_…&maxLive=9&interval=10
 ### Security & Limits
 
 - **Maximum lifetime is 365 days.** Bambuddy explicitly rejects "never expires" because a leaked permanent token would be irrevocable footgun-by-design.
-- **Tokens are stored as a hash.** A DB dump can't be replayed against the camera endpoint.
+- **Tokens are stored as a hash.** A DB dump can't be replayed against the camera endpoint, and a token cannot be recovered from its hash. Token lists show names and dates, never the token itself. Treat saved browser-source URLs as credentials.
+- **Browser memory only.** The builder does not save entered, imported or newly created credentials in browser storage. Leaving or reloading clears them.
 - **Scoped, and scopes don't leak into each other.** A Camera stream token reaches only the stream and snapshot endpoints; a Cam Wall token additionally reaches the Cam Wall feed; a Streaming Overlay token additionally reaches one printer's overlay status and the shared overlay logo. None can call any other Bambuddy API, and none exposes an IP address, serial number or access code.
 - **Revocable at any time.** Owners can revoke their own tokens; admins can revoke anyone's from the same panel.
 - **Last-used timestamp** is shown so you can identify dead config and clean up.
