@@ -30,7 +30,7 @@ Connect external network cameras to replace the built-in printer camera. Useful 
 
 ### Configuration
 
-1. Go to **Settings** > **General** > **Camera**
+1. Go to **Settings** > **Camera**
 2. Find your printer in the **External Cameras** section
 3. Toggle the switch to enable
 4. Enter the camera URL
@@ -620,7 +620,7 @@ The same shape works for any Bambu printer that speaks RTSPS on port `322` — *
    http://192.168.101.29:1984/api/stream.mjpeg?src=p2s_mjpeg
    ```
 
-2. In Bambuddy → **Settings** → **General** → **Camera** → enable **External Camera** for the affected printer.
+2. In Bambuddy → **Settings** → **Camera** → enable **External Camera** for the affected printer.
 3. Paste the go2rtc URL above into the **Camera URL** field, set type to **MJPEG**, and click **Test**.
 4. Save.
 
@@ -682,7 +682,7 @@ For example: `http://192.168.1.100:8000/overlay/1`
 
 ### Streaming Overlay token (login-enabled deployments)
 
-1. Go to **Settings → API Keys → Streaming Overlay**.
+1. Go to **Settings → Camera → Streaming Overlay**.
 2. Choose **Create overlay token**, give it a name and expiry, and create it.
    The builder uses the token returned at creation. You can also create one in
    **Camera API Tokens** with the **Streaming Overlay** scope and copy it into
@@ -763,7 +763,7 @@ The overlay displays:
 ### Customization
 
 !!! tip "Build the URL in the UI"
-    **Settings → API Keys → Streaming Overlay** has a builder: pick the printer,
+    **Settings → Camera → Streaming Overlay** has a builder: pick the printer,
     tick the fields you want, set layout, size, artwork, frame rate and branding,
     paste in a token if you need one, and copy the finished URL. It also has a preview so you can see
     the result before pasting it into OBS. The parameters below are what it
@@ -838,7 +838,7 @@ viewer's stream and runs at its frame rate - see
 
 #### Version 2 artwork (portrait and landscape)
 
-In **Settings → API Keys → Streaming Overlay**, set **Artwork** to **Version 2**, select the fields to show, and copy the generated URL into your OBS browser source. **Classic** is the default, and existing URLs keep the original layout unless you add `artwork=2`.
+In **Settings → Camera → Streaming Overlay**, set **Artwork** to **Version 2**, select the fields to show, and copy the generated URL into your OBS browser source. **Classic** is the default, and existing URLs keep the original layout unless you add `artwork=2`.
 
 ```
 /overlay/1?artwork=2&show=printer,model,filename,status,progress,layers,eta,nozzle,bed,chamber
@@ -883,7 +883,7 @@ At 100%, a background placed behind the overlay remains visible. The checkerboar
 
 #### Custom logo and progress colours
 
-In **Settings → API Keys → Streaming Overlay → Branding**, upload a PNG or WebP logo. Transparency is preserved. Images must be at most 2 MiB and 4 million pixels; animated images are not supported. Bambuddy stores a sanitized PNG on the server, resized to fit within 512 × 512 pixels.
+In **Settings → Camera → Streaming Overlay → Branding**, upload a PNG or WebP logo. Transparency is preserved. Images must be at most 2 MiB and 4 million pixels; animated images are not supported. Bambuddy stores a sanitized PNG on the server, resized to fit within 512 × 512 pixels.
 
 Enable **Custom logo** to include it in the generated overlay URL. Both Classic and Version 2 place it above the Bambuddy logo, preserving its proportions and limiting its size. The existing Bambuddy mark stays visible.
 
@@ -1054,8 +1054,8 @@ For Home Assistant, Frigate, kiosks, or any external integration that needs a st
 
 ### Creating a Token
 
-1. Go to **Settings** → **API Keys**
-2. Scroll to **Camera API Tokens** (below the Webhook Endpoints documentation)
+1. Go to **Settings** → **Camera**
+2. Scroll to **Camera API Tokens** (below External Cameras)
 3. Enter a descriptive name (e.g., `Home Assistant`, `Kitchen Kiosk`, `Frigate`)
 4. Pick a **scope** (see below)
 5. Pick a lifetime (1–365 days, default 90)
@@ -1163,11 +1163,11 @@ http://your-bambuddy/camwall?token=bblt_…&maxLive=9&interval=10
 
 Creating and managing camera tokens requires the `camera:view` permission — the same permission already needed for the existing 60-minute browser-side stream tokens. Default Viewers and Operators groups have it.
 
-To delegate token management to a non-admin user, ensure they're in a group with both `camera:view` and `settings:read` (so they can reach Settings → API Keys).
+To delegate token management to a non-admin user, ensure they're in a group with both `camera:view` and `settings:read` (so they can reach Settings → Camera).
 
 ### Revoking a Token
 
-1. Go to **Settings** → **API Keys** → **Camera API Tokens**
+1. Go to **Settings** → **Camera** → **Camera API Tokens**
 2. Find the token in the list (use the `lookup_prefix` to identify it if you've forgotten the name)
 3. Click **Revoke**, confirm in the modal
 
