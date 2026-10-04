@@ -31,11 +31,13 @@ Connect external network cameras to replace the built-in printer camera. Useful 
 ### Configuration
 
 1. Go to **Settings** > **Camera**
-2. Find your printer in the **External Cameras** section
-3. Toggle the switch to enable
+2. Find your printer in the camera card's list. With 8 printers or more, type part of its name or location into **Filter printers**
+3. Switch on **External** in the printer's row. Its camera fields open below the row
 4. Enter the camera URL
-5. Select the camera type
+5. Select the camera type, and the rotation if the camera is mounted turned
 6. Click **Test** to verify connection
+
+The fields fold away again when you open another printer. A closed row shows the camera type and where it points, such as `MJPEG · 192.168.1.61:1984`; click the arrow at the end of the row to open it again.
 
 !!! tip "RTSP Authentication"
     Include credentials in the URL: `rtsp://user:password@192.168.1.50:554/stream`
@@ -44,7 +46,7 @@ Connect external network cameras to replace the built-in printer camera. Useful 
     For USB cameras, enter the device path (e.g., `/dev/video0`). Bambuddy will auto-detect available V4L2 devices. Install `v4l2-utils` for enhanced device detection: `sudo apt install v4l-utils`
 
 !!! tip "Snapshot URL override (go2rtc, IP cameras with `/frame.jpeg`-style endpoints)"
-    For **MJPEG**, **RTSP** and **USB** stream types, you can optionally provide a separate **Snapshot URL** below the live-stream URL. When set, Bambuddy fetches single-frame captures (notification thumbnails, finish photos, timelapse, plate detection) from this URL via plain HTTP GET instead of opening the live stream.
+    For **MJPEG**, **RTSP** and **USB** stream types, you can optionally provide a separate **Snapshot URL** below the live-stream URL (hover the info icon next to it for a reminder of what it does). When set, Bambuddy fetches single-frame captures (notification thumbnails, finish photos, timelapse, plate detection) from this URL via plain HTTP GET instead of opening the live stream.
 
     Useful when:
 
@@ -286,8 +288,8 @@ This creates a visual record of your completed prints!
 If you keep the chamber light off between uses, the live view is black and the photos in your notifications are too. Bambuddy can switch the light on whenever the camera is used:
 
 1. Go to **Settings** > **Camera**
-2. In the camera card, find the printer and switch on **Turn on chamber light for camera**
-3. Optionally set **Wait before snapshot** (2 seconds by default, up to 30)
+2. In the camera card's list, switch on **Light** in the printer's row
+3. Optionally set the printer's **Delay (s)**, the wait before a snapshot (2 seconds by default, up to 5)
 
 The light then turns on:
 
