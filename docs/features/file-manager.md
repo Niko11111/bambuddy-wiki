@@ -132,7 +132,7 @@ A folder's file count and last-activity time only count the files you can see.
 !!! example "A classroom"
     The teacher creates **Class Project** and shares it. Each student sees **Class Project** and their own folders, and nothing of the other students. A student's subfolder inside **Class Project** belongs to the student and stays private to them, so the teacher sees everyone's work while students only see their own.
 
-**Folders from before this feature.** On upgrade, a folder whose files (subfolders and trashed files included) all belong to one user becomes that user's folder, and an empty folder inside it goes with it. Every other existing folder (empty, used by several people, linked to a project or archive, external, or the **MakerWorld** and **Manyfold** import folders) is shared, so it stays visible as before. Folders created while authentication is off have no owner and are shared too, so turning authentication on later hides nothing.
+**Folders from before this feature.** On upgrade, a folder whose files (subfolders and trashed files included) all belong to one user becomes that user's folder, and an empty folder inside it goes with it. Every other existing folder (empty, used by several people, linked to a project or archive, external, or the **MakerWorld** and **Manyfold** import folders) is shared, so it stays visible as before. Folders created while authentication is off, and newly linked external folders, are shared too, so turning authentication on later hides nothing; an admin can stop sharing them.
 
 ### File Information
 
