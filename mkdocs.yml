@@ -153,6 +153,7 @@ nav:
       - Notifications: features/notifications.md
     - Integrations:
       - MakerWorld: features/makerworld.md
+      - Manyfold: features/manyfold.md
       - Spool Inventory: features/inventory.md
       - Storage Locations: features/storage-locations.md
       - Spoolman: features/spoolman.md
