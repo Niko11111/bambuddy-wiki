@@ -1175,9 +1175,10 @@ Optional URL parameters, if the defaults don't suit the screen:
 | `maxLive` | How many tiles stream live at once; the rest poll snapshots | 1–16 |
 | `interval` | Seconds between snapshot refreshes on non-live tiles | 2–60 |
 | `status` | Status overlay: `off` or `compact` (a token wall cannot select `full`) | — |
+| `size` | Tile size: `s`, `m`, `l` or `xl` (one tile across the full width) | — |
 
 ```
-http://your-bambuddy/camwall?token=bblt_…&maxLive=9&interval=10
+http://your-bambuddy/camwall?token=bblt_…&maxLive=9&interval=10&size=l
 ```
 
 !!! warning "The URL is the credential"

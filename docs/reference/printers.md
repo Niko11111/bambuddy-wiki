@@ -180,6 +180,10 @@ The Printers page has a **Cards / Cam wall** toggle next to the card-size select
 
 To keep the host CPU and LAN bandwidth bounded — especially on Raspberry Pi installs — Cam Wall only streams tiles that are currently visible on screen, up to a per-user **Max live streams** cap. Tiles that are visible but over the cap fall back to periodic **snapshot polling** at a configurable interval. Tiles that scroll off-screen pause entirely and release their backend transcoder slot. Disconnected printers also render paused (with the offline indicator) and do not consume a live-stream slot — only working tiles count against the cap.
 
+#### Tile size
+
+While the Cam Wall is showing, the **S / M / L / XL** selector sizes the camera tiles instead of the cards. On a wide screen S fits up to five tiles per row, M four (the default), L two, and XL one tile across the full width, which suits a setup with only one or two printers. Tiles keep their 16:9 shape. The Cam Wall remembers its own size, so changing it leaves the card size alone. Larger tiles also mean fewer of them on screen, and so fewer live streams.
+
 #### Settings
 
 The gear icon above the grid exposes three per-user knobs:
@@ -206,7 +210,7 @@ The wall is also a page in its own right at **`/camwall`** — bookmarkable, and
 
 For a wall-mounted TV or a Raspberry Pi in kiosk mode, which has no login session, append a **Cam Wall**-scoped camera token: `/camwall?token=…`. Bambuddy hands you the finished URL when you create the token. A token wall shows the state badge but never the print filename, drops the settings popover and click-through, and cannot see printer addresses or access codes.
 
-See [Long-Lived Camera Tokens](../features/camera.md#cam-wall-on-a-tv-or-kiosk) for the full setup, the optional `maxLive` / `interval` / `status` URL parameters, and what a leaked kiosk URL does and doesn't expose.
+See [Long-Lived Camera Tokens](../features/camera.md#cam-wall-on-a-tv-or-kiosk) for the full setup, the optional `maxLive` / `interval` / `status` / `size` URL parameters, and what a leaked kiosk URL does and doesn't expose.
 
 ---
 
