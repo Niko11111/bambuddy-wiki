@@ -139,6 +139,8 @@ You do not have to pick anything. Positions are assigned for you, preferring one
 
     When the same job is queued to several printers at once, each printer gets its own mapping, matched against its own AMS.
 
+    A job queued for a model or a location (**Any P2S**) has no saved mapping. Its trays are matched, by material and colour, on the printer it is given when it starts. Moving a job from a printer to a model or location clears the trays picked for that printer, and any **Print Anyway** given for them.
+
 !!! info "Preset match and colour match are separate judgements"
     The filament preset ID (`tray_info_idx`) names the **variant**, not an individual spool &mdash; `GFA00` is PLA Basic, `GFA01` PLA Matte, `GFA17` PLA Translucent, whatever colour the spool is. So when your slice asks for PLA Matte and exactly one Matte spool is loaded, auto-match selects it because it is the right variant, *and then still checks the colour*. If the colour differs you get the amber **Color mismatch** status on that slot rather than a green tick, and the slot stays selected so you can print anyway or pick another. Since [#2687](https://github.com/maziggy/bambuddy/issues/2687) the auto-matched and manually-picked verdicts for a given tray always agree.
 
