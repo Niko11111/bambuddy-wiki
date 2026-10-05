@@ -319,7 +319,7 @@ The **Batches** tab on the Print Queue page is where orders live. It is a separa
 | **Done** | Runs that completed |
 | **Still owed** | Target minus everything that is queued, printing or done |
 | **Failed** | Runs that burned. These do **not** count towards the target |
-| **Cost** | Material plus energy, measured from the runs that actually happened |
+| **Cost** | Material plus energy plus [printer wear](statistics.md#printer-wear-cost), measured from the runs that actually happened |
 
 A failed, cancelled or skipped run does not satisfy a target. That is deliberate: if two parts are wanted and one fails, the order still owes one, and says so. A cancelled *order* is left alone entirely &mdash; cancelling is you saying you no longer want the work.
 
@@ -344,7 +344,7 @@ This applies only to the last run of a plate in an order that is still active. A
 
 ### Cost
 
-Cost is **measured, not estimated**. Each finished run's material and energy cost is attributed to the order through the queue item that produced it, so a reprint of the same file outside the order never lands in its total. Multi-plate orders get each plate's own cost rather than the whole file's.
+Cost is **measured, not estimated**. Each finished run's material, energy and printer wear cost is attributed to the order through the queue item that produced it, so a reprint of the same file outside the order never lands in its total. Multi-plate orders get each plate's own cost rather than the whole file's.
 
 Until an order has completed at least one run there is no honest number, so the cost reads as unknown rather than as `0.00`. Once runs complete, the remaining-cost estimate is their observed average multiplied by what is still owed.
 

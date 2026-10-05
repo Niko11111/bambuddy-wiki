@@ -308,7 +308,7 @@ whole tree:
 - Print jobs and parts
 - Print time
 - Filament used
-- Total cost (filament, energy and BOM)
+- Total cost (filament, energy, printer wear and BOM)
 - Progress against every target in the tree added together
 
 !!! important "Two sets of numbers, and they mean different things"
@@ -538,6 +538,7 @@ Track project expenses:
 
 - **Parts cost** - Sum of BOM item prices
 - **Additional costs** - Manual entries for other expenses
+- **Printer wear** - Wear of the project's prints on printers that have a [wear cost per printing hour](statistics.md#printer-wear-cost). Counts toward the total cost and the budget
 
 ### Currency
 

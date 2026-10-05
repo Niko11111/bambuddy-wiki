@@ -36,7 +36,7 @@ Each row in the Print Log represents a single print event:
 | **Filament Used** | How much filament this run consumed, in grams |
 | **Actions** | Per-row :material-pencil: edit and :material-delete: delete buttons (see [Per-row actions](#per-row-actions)) |
 
-Four more columns are available but hidden by default &mdash; switch them on with [Choosing columns](#choosing-columns):
+Five more columns are available but hidden by default &mdash; switch them on with [Choosing columns](#choosing-columns):
 
 | Column | Description |
 |--------|-------------|
@@ -44,6 +44,7 @@ Four more columns are available but hidden by default &mdash; switch them on wit
 | **Cost** | Filament cost for this run, in your configured currency |
 | **Energy** | Power drawn during the run, in kWh. Needs a [smart plug](energy.md) |
 | **Energy Cost** | What that power cost |
+| **Wear Cost** | Printer wear for this run: its duration at the printer's [wear cost per printing hour](statistics.md#printer-wear-cost) |
 
 !!! note "These are per-run figures, not the archive's"
     **Filament Used** and **Cost** are measured for *this* print, not copied from the file's estimate: a print that failed part-way is scaled to the progress it reached, tracked spools are preferred over estimates, and a multi-plate project dispatched one plate at a time counts only the plate that ran. That is why a row can differ from the filament figure on the archive card, which is the whole file's total.
@@ -200,7 +201,7 @@ GET /api/v1/print-log/
 | `date_to` | datetime | End of date range |
 | `limit` | integer | Number of entries per page (default 25) |
 | `offset` | integer | Pagination offset |
-| `sort_by` | string | Column to order by (default `date`). One of `date`, `print_name`, `printer`, `user`, `status`, `duration`, `completed_at`, `filament`, `filament_used`, `cost`, `energy`, `energy_cost`. Anything else returns 400 |
+| `sort_by` | string | Column to order by (default `date`). One of `date`, `print_name`, `printer`, `user`, `status`, `duration`, `completed_at`, `filament`, `filament_used`, `cost`, `energy`, `energy_cost`, `wear_cost`. Anything else returns 400 |
 | `sort_dir` | string | `asc` or `desc` (default `desc`). Rows with no value in the sorted column come last either way |
 
 **Example:**

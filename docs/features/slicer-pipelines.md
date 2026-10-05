@@ -145,7 +145,7 @@ API keys can read and run pipelines, but not author them:
 See [API Keys](api-keys.md#available-permissions) for the toggle list.
 
 !!! tip "Upgrading from an older version"
-    On installs seeded before pipelines existed, the Administrators system group is auto-backfilled with the three permissions on the next startup. The Operators group is also auto-backfilled. Custom groups stay untouched — grant `pipelines:*` explicitly through **Settings → Users → Groups** if a custom role needs them.
+    On installs seeded before pipelines existed, the upgrade gives the Administrators and Operators groups all three permissions, and any other group that can read the library or settings gets `pipelines:read`. That happens once: a permission you later remove from a group stays removed. Grant `pipelines:write` and `pipelines:run` through **Settings → Users → Groups** if a custom role needs them.
 
 ---
 
