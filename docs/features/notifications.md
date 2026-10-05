@@ -20,6 +20,7 @@ Get notified about print events via WhatsApp, Telegram, Discord, Email, Home Ass
 | **Discord** | :material-star::material-star-outline::material-star-outline: Easy | Channel webhooks |
 | **Pushover** | :material-star::material-star-outline::material-star-outline: Easy | Professional push service |
 | **Bark** | :material-star::material-star-outline::material-star-outline: Easy | iOS push, no account, self-hostable |
+| **Gotify** | :material-star::material-star-outline::material-star-outline: Easy | Push from your own Gotify server, per-event priority |
 | **Telegram** | :material-star::material-star::material-star-outline: Medium | Via Telegram Bot |
 | **Email** | :material-star::material-star::material-star-outline: Medium | SMTP email |
 | **Home Assistant** | :material-star::material-star-outline::material-star-outline: Easy | HA dashboard or mobile push via any notify service, with custom data fields and automatic photo attachment |
@@ -158,6 +159,40 @@ Open-source push notifications for iPhone/iPad via the [Bark](https://github.com
 
 !!! tip "Photo attachment"
     When a camera snapshot is available, it's sent as Bark's `icon` — the closest thing Bark's push schema has to a photo attachment, shown as a round icon on iOS. See [Finish Photos](#finish-photos) below for requirements.
+
+---
+
+### Gotify
+
+Push notifications from your own [Gotify](https://gotify.net) server, received by the Gotify Android app or any other Gotify client:
+
+1. In the Gotify web UI, open **Apps** and create an application (e.g. "Bambuddy")
+2. Copy the application's **token**
+3. In Bambuddy, add a provider and select **Gotify**:
+
+| Field | Value |
+|-------|-------|
+| **Server URL** | Your Gotify server, e.g. `https://gotify.example.com` (a LAN address works too) |
+| **App Token** | The application token from step 2 |
+
+The token is sent in the `X-Gotify-Key` header, never in the URL.
+
+#### Per-event priority
+
+Like ntfy, each enabled event gets a dropdown in the **Gotify Priority** section of the dialog. Gotify priorities run from 0 to 10, and Bambuddy sends the five levels as:
+
+| Level | Gotify priority | Gotify Android app |
+|-------|:---------------:|--------------------|
+| **Min** | 0 | Silent, minimised |
+| **Low** | 2 | Silent |
+| **Default** | 5 | Sound |
+| **High** | 8 | Sound and pop-up |
+| **Urgent** | 10 | Sound and pop-up |
+
+Events left at *Default*, the test notification and the [daily digest](#daily-digest) go out at 5.
+
+!!! tip "Photo and tap action"
+    When a camera snapshot is available, it's sent as Gotify's `bigImageUrl`, which the Android app shows as a large picture. The [outcome confirmation](#print-events) opens the outcome dialog in Bambuddy when you tap the notification. Both need **External URL** set; see [Finish Photos](#finish-photos).
 
 ---
 
@@ -447,7 +482,7 @@ When a camera snapshot is available (e.g. First Layer Complete, Print Started, P
 | **Print Failed** | Print fails or errors (includes scaled filament usage and progress) |
 | **Print Stopped** | Manual cancellation (includes scaled filament usage and progress) |
 | **Plate Clear Required** | A print reached a terminal state and the queue is gated until the build plate is confirmed clear. Off by default — it fires after every print, at the same moment as Print Completed. Also published over [MQTT](mqtt.md). |
-| **Outcome Confirmation** | A completed print that opted in to [outcome confirmation](archiving.md#post-print-outcome-confirmation) asks for its good/reject verdict. On **ntfy** and **Telegram** the notification carries Good/Reject buttons that answer it directly; every other channel, Pushover and Bark included, gets a link that opens the outcome dialog in Bambuddy. Set *External URL* so these links work from a phone — without it they point at `APP_URL`, which defaults to `localhost`. Telegram can take a 👍 / 👎 reaction on the message instead, which needs no External URL — see [Verdict mode](#verdict-mode). The one-tap verdict links are also available as `{good_url}` / `{reject_url}` for your own templates, but the default body leaves them out, because anything that opens links in a message (a preview card, a mail scanner) would reach them. On by default — it only ever fires for prints where you enabled *Ask for Outcome*, so this toggle just mutes a channel. |
+| **Outcome Confirmation** | A completed print that opted in to [outcome confirmation](archiving.md#post-print-outcome-confirmation) asks for its good/reject verdict. On **ntfy** and **Telegram** the notification carries Good/Reject buttons that answer it directly; every other channel, Pushover, Bark and Gotify included, gets a link that opens the outcome dialog in Bambuddy. Set *External URL* so these links work from a phone — without it they point at `APP_URL`, which defaults to `localhost`. Telegram can take a 👍 / 👎 reaction on the message instead, which needs no External URL — see [Verdict mode](#verdict-mode). The one-tap verdict links are also available as `{good_url}` / `{reject_url}` for your own templates, but the default body leaves them out, because anything that opens links in a message (a preview card, a mail scanner) would reach them. On by default — it only ever fires for prints where you enabled *Ask for Outcome*, so this toggle just mutes a channel. |
 | **Missing Spool Assignment** | Print started with required AMS trays that have no assigned spool (off by default) |
 | **First Layer Complete** | First layer finished — check adhesion remotely (includes camera snapshot) |
 | **Bed Cooled** | Bed temperature dropped below threshold after print (configurable in Settings) |
@@ -736,7 +771,7 @@ need `{finish_photo_url}` in the template for this.
 
 #### Fetched-URL attachment
 
-Home Assistant, Bark and Slack/Mattermost-format webhooks can't take a byte
+Home Assistant, Bark, Gotify and Slack/Mattermost-format webhooks can't take a byte
 upload — they fetch the photo from a URL themselves and attach it on their end.
 This needs **External URL** set in **Settings** > **Network**, or there's
 nothing for them to fetch, and (same as above) doesn't need `{finish_photo_url}`
@@ -746,6 +781,7 @@ in the template.
 |---------|-------------------|
 | **Home Assistant** | Attached automatically via `data.image` — but only when you've set a custom **Home Assistant Service**. The default persistent-notification dashboard has a strict schema that rejects the extra field, so it falls back to link-only (see below) unless you set a service. |
 | **Bark** | Attached automatically as the notification `icon`. |
+| **Gotify** | Attached automatically as `bigImageUrl`, shown as a large picture in the Android app. |
 | **Webhook (Slack format)** | Attached via a legacy `attachments[].image_url` block. |
 
 !!! note "How the photo link is protected"
