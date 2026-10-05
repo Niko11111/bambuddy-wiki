@@ -291,6 +291,8 @@ Remove a link:
 2. Find the spool
 3. Clear the `extra.tag` field
 
+On Spoolman 0.27 or later, also remove the spool's tags in Spoolman's own tag list, or the spool is still found by them (see [Native tags](#native-tags-spoolman-027)). Unlinking in Bambuddy, or **Clear RFID Tag** on the spool, removes both for you.
+
 ### Custom fields Bambuddy registers
 
 Spoolman rejects any write naming an extra field it doesn't know about, so Bambuddy registers the four it uses the first time it needs them:
@@ -303,6 +305,63 @@ Spoolman rejects any write naming an extra field it doesn't know about, so Bambu
 | `bambu_color_name` | The colour's human-readable name |
 
 **You can rename these in Spoolman's own field editor, or give them a default, and Bambuddy will leave your changes alone.** It matches on the field's `key`, which never changes, rather than on the display name. Deleting one, though, means Bambuddy re-creates it on the next sync &mdash; it needs the field to exist in order to write to it.
+
+On Spoolman 0.27 or later, the identifiers in `tag` are also kept as native tags (next section). `tag` keeps being written all the same, so readers that only know `extra.tag` and a downgrade to an older Spoolman lose nothing.
+
+### :material-nfc-variant: Native tags (Spoolman 0.27+) { #native-tags-spoolman-027 }
+
+Spoolman 0.27 links NFC tags to spools itself: a spool can carry several tags, a tag belongs to exactly one spool, and Spoolman can say which spool a tag belongs to without anyone loading the whole inventory. When Bambuddy finds a Spoolman that supports this, it uses those tags next to `extra.tag`. On an older Spoolman nothing changes.
+
+What that gives you:
+
+- **Every side of a Bambu spool finds it.** A Bambu spool has a tray UUID and two RFID chips, one per side. `extra.tag` holds one identifier; Spoolman's tag list holds all three.
+- **Tags linked elsewhere count.** A tag you link in Spoolman, or with another reader on the same Spoolman, is found by Bambuddy and SpoolBuddy too, and the other way round.
+- **Faster scans.** A SpoolBuddy scan asks Spoolman for the one tag instead of loading every spool.
+
+What Bambuddy does with them:
+
+| When | What happens |
+|------|--------------|
+| SpoolBuddy scans a tag | The tray UUID is looked up first, then the chip UID, each with one query to Spoolman. Only if that finds nothing does Bambuddy search `extra.tag` as before. The spool that is found gets what the scan read added to its tags. |
+| The AMS reads a spool | Same as a scan: the spool collects its tray UUID and the UID of the chip facing the reader. Turning a spool around adds the other chip. |
+| You link a tag | The tag is added to the spool's tags; tags it already had stay. |
+| You unlink, or use **Clear RFID Tag** | The spool's tags are removed together with `extra.tag`. |
+| SpoolBuddy writes a tag | The written tag is linked to the spool. |
+
+!!! note "Chip UIDs from the AMS"
+    The AMS reports a Bambu chip's 4-byte UID padded to 8 bytes: a chip any reader sees as `D3E68F32` arrives as `D3E68F3200000100`. Bambuddy stores the chip's own 4 bytes, so the tag matches what SpoolBuddy and other readers read.
+
+#### Copying your existing tags
+
+Spools linked before you upgraded Spoolman have their tag only in `extra.tag`. They are found as before, and each one moves over by itself the first time it is scanned or read by the AMS. To copy them all at once:
+
+1. Go to **Settings** > **Filament**. With Spoolman connected and on 0.27 or later, the **Spoolman native tags** section appears.
+2. Click **Check tags**. This is a dry run and changes nothing:
+
+    | Line | Meaning |
+    |------|---------|
+    | **To copy** | Spools whose `extra.tag` is not a native tag yet |
+    | **Already in Spoolman** | Spools that already carry it |
+    | **AMS slot IDs** | Placeholders Bambuddy uses for a slot without RFID. They name a slot, not a spool, and stay in `extra.tag` only |
+    | **Conflicts** | The tag already belongs to another spool, listed by spool number |
+
+3. Click **Copy tags** to copy what the check listed under **To copy**.
+
+![Native tags check](../assets/spoolman_native_tags_check.png){ .screenshot .centered }
+
+`extra.tag` is left as it is.
+
+#### When a tag belongs to another spool
+
+Spoolman lets a tag belong to one spool only. If a tag Bambuddy wants to add is held by another spool, Bambuddy leaves it there and does not move it by guessing:
+
+- linking such a tag answers with the spool that holds it, as linking an already used tag always did
+- a scan or AMS read still finds the right spool, but does not add that tag, and logs `Native tag … belongs to spool …`
+- **Check tags** lists it under **Conflicts**
+
+To settle it, remove the tag from the wrong spool in Spoolman. The next scan adds it where it belongs.
+
+For a Bambu spool, the tray UUID decides: both chips of a spool carry it, so a scan finds the spool by its UUID even if one of its chips was linked to another spool by mistake.
 
 ---
 
@@ -465,6 +524,10 @@ Bambu Lab filaments include RFID data:
 1. Unlink the incorrect spool
 2. Manually link correct spool
 3. Check RFID data matches
+
+### A Tag Is Not Added to a Spool
+
+On Spoolman 0.27 or later, the log says `Native tag … belongs to spool …` when a tag is already linked to another spool. Remove it from that spool in Spoolman; see [When a tag belongs to another spool](#when-a-tag-belongs-to-another-spool).
 
 ---
 
