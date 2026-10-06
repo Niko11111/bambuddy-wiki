@@ -333,7 +333,7 @@ What Bambuddy does with them:
 
 #### Copying your existing tags
 
-Spools linked before you upgraded Spoolman have their tag only in `extra.tag`. They are found as before, and each one moves over by itself the first time it is scanned or read by the AMS. To copy them all at once:
+Spools linked before you upgraded Spoolman have their tag only in `extra.tag`. They are found as before, and each one moves over by itself the first time it is scanned or read by the AMS. To copy them all at once (archived spools are left out):
 
 1. Go to **Settings** > **Filament**. With Spoolman connected and on 0.27 or later, the **Spoolman native tags** section appears.
 2. Click **Check tags**. This is a dry run and changes nothing:
@@ -343,7 +343,7 @@ Spools linked before you upgraded Spoolman have their tag only in `extra.tag`. T
     | **To copy** | Spools whose `extra.tag` is not a native tag yet |
     | **Already in Spoolman** | Spools that already carry it |
     | **AMS slot IDs** | Placeholders Bambuddy uses for a slot without RFID. They name a slot, not a spool, and stay in `extra.tag` only |
-    | **Conflicts** | The tag already belongs to another spool, listed by spool number |
+    | **Conflicts** | The tag already belongs to another active spool, a filament or a location, listed by spool number |
 
 3. Click **Copy tags** to copy what the check listed under **To copy**.
 
@@ -353,13 +353,15 @@ Spools linked before you upgraded Spoolman have their tag only in `extra.tag`. T
 
 #### When a tag belongs to another spool
 
-Spoolman lets a tag belong to one spool only. If a tag Bambuddy wants to add is held by another spool, Bambuddy leaves it there and does not move it by guessing:
+Spoolman lets a tag belong to one spool, filament or location only, and that includes archived spools.
 
-- linking such a tag answers with the spool that holds it, as linking an already used tag always did
-- a scan or AMS read still finds the right spool, but does not add that tag, and logs `Native tag … belongs to spool …`
-- **Check tags** lists it under **Conflicts**
+- **An archived spool** gives the tag up. It was archived because it is used up or was replaced, so the tag belongs to the active spool now. Bambuddy moves it there, and the log says `Native tag … moved from archived spool …`.
+- **Another active spool, a filament or a location** keeps it. Bambuddy does not move it by guessing:
+    - linking such a tag answers with the spool that holds it, as linking an already used tag always did
+    - a scan or AMS read still finds the right spool, but does not add that tag, and logs `Native tag … belongs to …` once. The AMS sync tries again after 10 minutes, not on every AMS update; scanning the spool on a reader tries again at once
+    - **Check tags** lists it under **Conflicts**
 
-To settle it, remove the tag from the wrong spool in Spoolman. The next scan adds it where it belongs.
+To settle a conflict, remove the tag from the wrong spool in Spoolman. Scanning the spool adds it where it belongs right away; otherwise the AMS sync adds it within 10 minutes.
 
 For a Bambu spool, the tray UUID decides: both chips of a spool carry it, so a scan finds the spool by its UUID even if one of its chips was linked to another spool by mistake.
 
@@ -527,7 +529,7 @@ Bambu Lab filaments include RFID data:
 
 ### A Tag Is Not Added to a Spool
 
-On Spoolman 0.27 or later, the log says `Native tag … belongs to spool …` when a tag is already linked to another spool. Remove it from that spool in Spoolman; see [When a tag belongs to another spool](#when-a-tag-belongs-to-another-spool).
+On Spoolman 0.27 or later, the log says `Native tag … belongs to …` when a tag is already linked to another active spool, a filament or a location. Remove it from that spool in Spoolman; see [When a tag belongs to another spool](#when-a-tag-belongs-to-another-spool).
 
 ---
 
