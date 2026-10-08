@@ -322,14 +322,14 @@ What Bambuddy does with them:
 
 | When | What happens |
 |------|--------------|
-| SpoolBuddy scans a tag | The tray UUID is looked up first, then the chip UID, each with one query to Spoolman. Only if that finds nothing does Bambuddy search `extra.tag` as before. The spool that is found gets what the scan read added to its tags. |
+| SpoolBuddy scans a tag | The tray UUID is looked up first, then the chip UID. Each is first asked of Spoolman with one query, and `extra.tag` is searched as before only if that finds nothing. The spool that is found gets what the scan read added to its tags. |
 | The AMS reads a spool | Same as a scan: the spool collects its tray UUID and the UID of the chip facing the reader. Turning a spool around adds the other chip. |
 | You link a tag | The tag is added to the spool's tags; tags it already had stay. |
 | You unlink, or use **Clear RFID Tag** | The spool's tags are removed together with `extra.tag`. |
-| SpoolBuddy writes a tag | The written tag is linked to the spool. |
+| SpoolBuddy writes a tag | The written tag is linked to the spool and taken from any other spool that held it, since it was just rewritten for this one. |
 
 !!! note "Chip UIDs from the AMS"
-    The AMS reports a Bambu chip's 4-byte UID padded to 8 bytes: a chip any reader sees as `D3E68F32` arrives as `D3E68F3200000100`. Bambuddy stores the chip's own 4 bytes, so the tag matches what SpoolBuddy and other readers read.
+    The AMS reports a Bambu chip's 4-byte UID padded to 8 bytes: a chip any reader sees as `D3E68F32` arrives as `D3E68F3200000100`. Bambuddy stores the chip's own 4 bytes, so the tag matches what SpoolBuddy and other readers read. **Copy tags** does the same with a padded UID it finds in `extra.tag`.
 
 #### Copying your existing tags
 
@@ -356,7 +356,7 @@ Spools linked before you upgraded Spoolman have their tag only in `extra.tag`. T
 Spoolman lets a tag belong to one spool, filament or location only, and that includes archived spools.
 
 - **An archived spool** gives the tag up. It was archived because it is used up or was replaced, so the tag belongs to the active spool now. Bambuddy moves it there, and the log says `Native tag … moved from archived spool …`.
-- **Another active spool, a filament or a location** keeps it. Bambuddy does not move it by guessing:
+- **Another active spool, a filament or a location** keeps it. Bambuddy does not move it by guessing (the one exception is a tag SpoolBuddy has just written, see above):
     - linking such a tag answers with the spool that holds it, as linking an already used tag always did
     - a scan or AMS read still finds the right spool, but does not add that tag, and logs `Native tag … belongs to …` once. The AMS sync tries again after 10 minutes, not on every AMS update; scanning the spool on a reader tries again at once
     - **Check tags** lists it under **Conflicts**
